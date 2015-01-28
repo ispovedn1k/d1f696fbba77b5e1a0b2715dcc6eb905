@@ -1,0 +1,134 @@
+@CHARSET "UTF-8";
+
+pre {
+	background-color: #efefef;
+	border: 1px solid #dfdfdf;
+	padding: 10px;
+}
+
+.lightTank {
+	color: #008800;
+}
+
+.mediumTank {
+	color: #c49209;
+}
+
+.heavyTank {
+	color: #3333333;
+}
+
+.AT-SPG {
+	color: #000088;
+}
+
+.SPG {
+	color: #6c400d;
+}
+
+
+/******************************************************/
+.spoiler .spoiler-head {
+	cursor: pointer;
+	background-color: #aaaadd;
+}
+.spoiler .spoiler-head:hover {
+	background-color: #88aadd;
+}
+
+.spoiler .spoiler-body {
+	display: none;
+	border: 1px solid #444444;
+}
+
+
+/******************************************************/
+.squad-box {
+	border: 1px solid #888888;
+	width: 480px;
+	height: 320px;
+	position: relative;
+	z-index: 0;
+}
+
+.candidate {
+	border: 1px solid #dddddd;
+	background-color: #efefef;
+	width: 468px;
+	height: 24px;
+	padding-left: 10px;
+	z-index: 1;
+	cursor: move;
+}
+
+.candidate:active {
+	border: 1px dashed #ff0000;
+}
+
+.candidate:hover {
+	background-color: #e8e8e8;
+}
+
+.candidate div.candidate-vehicles {
+	display: none;
+	background-color: #fffffff;
+	border: 1px: solid #eeeeee;
+	width: 468px;
+	min-height: 30px;
+	position: absolute;
+	z-index: 2;
+	margin-left: 468px;
+}
+
+.candidate:hover div.candidate-vehicles {
+	display: block;
+}
+
+/******************************************************/
+.main-menu {
+	margin: 0px;
+	padding: 0px;
+}
+
+.main-menu a{
+	display: inline-block;
+	width: 110px;
+	height: 24px;
+	text-decoration: none;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+	color: #0000bb;
+	border: 1px solid #dddddd;
+	box-sizing: content-box;
+}
+
+.main-menu a.authblock {
+	float: right;
+}
+
+
+/******************************************************/
+div.main-container{
+	margin: 0 auto;
+	border: 1px solid #888;
+	width: 1000px;
+	min-height: 90%;
+	z-index: 0;
+	box-sizing: border-box;
+}
+
+div.copyright {
+	text-align: center;
+}
+
+
+
+/******************************************************/
+.interview_new {
+	width: 100%;
+}
+.interview_new td {
+	vertical-align: top;
+	border: 1px solid #dddddd;
+}
