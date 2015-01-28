@@ -60,7 +60,11 @@
 		<?php endforeach;?>
 		</div>
 		</td>
-		<td width="40%">filters</td>
+		<td width="40%">filters
+			<label>Кол-во боев:
+				<input type="text" />
+			</label>
+		</td>
 	</tr>
 	</tbody>
 </table>
