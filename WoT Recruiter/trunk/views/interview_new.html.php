@@ -4,19 +4,27 @@
 <caption>Создайте новый отряд</caption>
 	<tbody>
 	<tr>
-		<td colspan="3">
-			<label>Имя отряда: <br />
+		<td colspan="2">
+			<label>Позывной отряда: <br />
 				<input type="text" name="int_name" />
 			</label>
 			<input type="submit" name="gogo" />
 			<select><option>цель создания</option></select>
+			<div class="radiogroup"><label>Видимость команды:</label><br />
+				<label><input type="radio" name="visability" value="all" checked="checked"/>видна всем</label><br />
+				<label><input type="radio" name="visability" value="clan" />только бойцам клана</label><br />
+				<label><input type="radio" name="visability" value="invite" />только по приглашениям</label><br />
+			</div>
+		</td>
+		<td>Запрошенная Вами техника:
+			<div id="selectedVehicles"></div>
 		</td>
 	</tr>
 	<tr>
 		<td width="20%">
 		<label>Нация:<br />
 			<select class="filter nation" name="nation">
-				<option value="all"><?php echo i18n("allNations")?></option>
+				<option value="all"><?php echo i18n("allNations");?></option>
 				<?php foreach ( $nations as $nation ) :?>
 				<option value="<?php echo $nation;?>"><?php echo i18n($nation);?></option>
 				<?php endforeach;?>
@@ -50,20 +58,76 @@
 		<br />
 		</td>
 		<td width="40%">
+		<div class="helper">Щелкните по танку, и нажмите кнопку "Добавить", чтобы затребовать боевую единицу в команду.</div>
 		<div class="vehiclesbox">
 		<?php foreach ( $data as $vehicle ) : ?>
-			<div data-type="<?php echo $vehicle->type;?>" data-nation="<?php echo $vehicle->nation;?>" data-level="<?php echo $vehicle->lvl;?>"
-				class="vehicle <?php echo $vehicle->type;?>"><label>
-				<input type="checkbox" name="vehicles[]" value="<?php echo $vehicle->tank_id;?>" />
+			<div
+				data-type="<?php echo $vehicle->type;?>"
+				data-nation="<?php echo $vehicle->nation;?>"
+				data-level="<?php echo $vehicle->lvl;?>"
+				data-tank_id="<?php echo $vehicle->tank_id;?>"
+				data-type_i18n="<?php echo $vehicle->type_i18n;?>"
+				data-name_i18n="<?php echo $vehicle->name_i18n;?>"
+				data-short="<?php echo $vehicle->short_name_i18n;?>"
+				data-img="<?php echo $vehicle->image;?>"
+				class="vehicle <?php echo $vehicle->type;?>"
+				id="vehicle_<?php echo $vehicle->tank_id;?>">
+				<div class="contourbox"><img src="<?php echo $vehicle->contour_image;?>" alt="x" /></div>
 				<?php echo $vehicle->name_i18n;?>
 			</label></div>
 		<?php endforeach;?>
 		</div>
+		<?php 
+		/** @todo
+		 * Клик по танку создает JS объект, внутри которого определяется статистика по машине.
+		 * Эти объекты объединены в массив, ключами которого являются ID машин.
+		 * Клик по танку переводит курсор на нужный объект в массиве.
+		 * Изменения в полях статистики сразу приводят к изменениям свойств объектов.
+		 * Отправка данных происходит через ajax-post.
+		 * Ответом приходит статус-результат выполнения действия и ссылка-редирект на команду,
+		 * после чего вызов location.href обновляет контент. 
+		 */
+		?>
 		</td>
-		<td width="40%">filters
-			<label>Кол-во боев:
-				<input type="text" />
-			</label>
+		<td width="40%">
+			<div id="vehicleStatBox" class="groupbox">
+				<table>
+				<tr>
+					<td rowspan="2"><img src="" alt="" class="vimg"/></td>
+					<td class="vtype"></td>
+				</tr>
+				<tr><td class="vname"></td></tr>
+				</table>
+				<div class="helper">При желании можете указать дополнительную информацию тут.</div>
+				<label>Кол-во боев:
+					<input type="text" id="battles" name="battles" />
+				</label>
+				<br />
+				<label>% побед:
+					<input type="text" id="winrate" name="winrate" />
+				</label>
+				<br />
+				<label>% попаданий:
+					<input type="text" id="avg_hits" name="avg_hits"/>
+				</label>
+				<br />
+				<label>средний урон:
+					<input type="text" id="avg_damage" name="avg_damage" />
+				</label>
+				<br />
+				<label>обнаружено в среднем:
+					<input type="text" id="avg_spoted" name="avg_spoted" />
+				</label>
+				<br />
+				<label>Требуется единиц:
+					<input type="text" id="num_required" name="num_required" />
+				</label>
+				<br />
+				<label>
+					<input type="button" value="request" id="addvehilcebutton" />
+					<input type="button" value="decline" id="removevehiclebutton" />
+				</label>
+			</div>
 		</td>
 	</tr>
 	</tbody>
@@ -73,4 +137,6 @@
 <script type="text/javascript">
 var x = new VehiclesFilter();
 x.init();
+
+
 </script>

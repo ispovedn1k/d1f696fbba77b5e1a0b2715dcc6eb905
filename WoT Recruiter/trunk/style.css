@@ -26,6 +26,37 @@ pre {
 	color: #6c400d;
 }
 
+.vehicle-preset {
+	display: inline-block;
+	width: 94px;
+	margin: 0px;
+	padding-left: 4px;
+}
+
+.vehicle:hover {
+	background-color: #FAFAFA;
+	border: 1px solid #EFEFEF;
+	cursor: pointer;
+}
+
+.vehicle .contourbox {
+	width: 95px;
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	background-color: transparent;
+	display: inline-block;
+}
+
+.pointed-vehicle {
+	background-color: #F5F5F5;
+	border: 1px solid #E4E4E4;
+}
+
+.selected-vehicle {
+	background-color: #E0E0E0;
+}
+
 
 /******************************************************/
 .spoiler .spoiler-head {
@@ -40,7 +71,6 @@ pre {
 	display: none;
 	border: 1px solid #444444;
 }
-
 
 /******************************************************/
 .squad-box {
