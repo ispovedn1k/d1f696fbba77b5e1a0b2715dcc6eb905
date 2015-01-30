@@ -4,24 +4,31 @@
 <caption>Создайте новый отряд</caption>
 	<tbody>
 	<tr>
-		<td colspan="2">
+		<td>
 			<label>Позывной отряда: <br />
-				<input type="text" name="int_name" />
+				<input type="text" name="itrv_name" id="itrv_name" />
+				<input type="hidden" name="itrv_id" id="itrv_id" />
 			</label>
-			<input type="submit" name="gogo" />
+			<br />
 			<select><option>цель создания</option></select>
 			<div class="radiogroup"><label>Видимость команды:</label><br />
 				<label><input type="radio" name="visability" value="all" checked="checked"/>видна всем</label><br />
 				<label><input type="radio" name="visability" value="clan" />только бойцам клана</label><br />
-				<label><input type="radio" name="visability" value="invite" />только по приглашениям</label><br />
+				<label><input type="radio" name="visability" value="invite" />только приглашенным</label><br />
 			</div>
 		</td>
 		<td>Запрошенная Вами техника:
 			<div id="selectedVehicles"></div>
 		</td>
+		<td>
+			<div class="helper">Добавьте описание</div>
+			<textarea id="itrv_comment" name="itrv_comment" class="commentbox"></textarea>
+			<input type="button" value="create" id="submit"/>
+		</td>
 	</tr>
 	<tr>
 		<td width="20%">
+		<div class="helper">Воспользуйтесь фильтрами, чтобы быстрее найти технику.</div>
 		<label>Нация:<br />
 			<select class="filter nation" name="nation">
 				<option value="all"><?php echo i18n("allNations");?></option>
@@ -74,7 +81,7 @@
 				id="vehicle_<?php echo $vehicle->tank_id;?>">
 				<div class="contourbox"><img src="<?php echo $vehicle->contour_image;?>" alt="x" /></div>
 				<?php echo $vehicle->name_i18n;?>
-			</label></div>
+			</div>
 		<?php endforeach;?>
 		</div>
 		<?php 

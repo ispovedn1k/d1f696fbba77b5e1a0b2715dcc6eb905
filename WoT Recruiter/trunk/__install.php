@@ -32,6 +32,9 @@ try {
 			`squads_num` int(3) NOT NULL DEFAULT 1,
 			`a_vehicles` text NOT NULL,
 			`active` BOOLEAN NOT NULL DEFAULT TRUE,
+			`visability` VARCHAR(7) NOT NULL DEFAULT 'all',
+			`plan` VARCHAR (8),
+			`itrv_comment` text,
 			`owner` INTEGER (10) NOT NULL
 		);";
 	if (false === $db->query( $sql )) {

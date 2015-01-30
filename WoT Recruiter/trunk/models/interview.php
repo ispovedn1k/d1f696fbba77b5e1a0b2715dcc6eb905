@@ -6,21 +6,20 @@
  *
  */
 class ModelInterview extends UniqDBObjectModel {
-	public $itrv_id;
-	
-	public $itrv_name;
+	public	$itrv_id,
+			$itrv_name,
+			$active,
+			$owner,
+			$squads_num,
+			$itrv_comment,
+			$plan,
+			$visability;
 	
 	public $a_vehicles;
 	
-	public $active;
-	
-	public $owner;
-	
-	public $squads_num;
-	
 	public $_candidates;
 	
-	public $_last_operation;
+	public $_all_vehicles;
 	
 	
 	public function __construct( $itrv_id = 0 ) {
@@ -54,32 +53,31 @@ class ModelInterview extends UniqDBObjectModel {
 			return null;
 		}
 		
-		$this->a_vehicles = $res->fetchAll(PDO::FETCH_CLASS, 'WoTVehicle');
-		// @todo Надо ли тут записывать в этот массив?
-		return $this->a_vehicles;
+		$this->_all_vehicles = $res->fetchAll(PDO::FETCH_CLASS, 'WoTVehicle');
+		return $this->_all_vehicles;
 	}
 	
 	
 	/**
-	 * @param string $itrv_name
-	 * @param array $vehicles
+	 * @param array $data : sunitised input array
 	 * @return multitype:string 
 	 */
-	public function create( $itrv_name, $vehicles ) {
-		$this->itrv_name = $itrv_name ? $itrv_name : 'noname00';
-		$this->a_vehicles = is_array($vehicles) ? $vehicles : array();
-		$this->active = true;
+	public function create( $data ) {
+		$this->itrv_name = $data['itrv_name'];
+		$this->a_vehicles = $data['vehicles'];
+		$this->active = $data['active'];
 		$this->owner = Engine::getInstance()->user->id;
-		$this->squads_num = 1;
+		$this->squads_num = $data['squads_num'];
+		$this->itrv_comment = $data['itrv_comment'];
+		$this->plan = $data['plan'];
+		$this->visability = $data['visability'];
 		
 		if ( $this->insertObjectToDB(array("itrv_id")) ){
-			return array(
-					'last_action' => "created_successfully",
-					'data' => Engine::getInstance()->db->lastInsertId(),		
-			);
+			Engine::getInstance()->db->lastInsertId();
 		}
 		else {
-			return array('last_action' => "creation_failed. ". print_r( Engine::getInstance()->db->errorInfo(), true));
+			Log::put( print_r( Engine::getInstance()->db->errorInfo(), true) );
+			return 0;
 		}
 	}
 	
@@ -89,18 +87,21 @@ class ModelInterview extends UniqDBObjectModel {
 	 * @return multitype:string 
 	 */
 	public function update( $data ) {
-		$this->itrv_name = $data['name'];
+		$this->itrv_name = $data['itrv_name'];
 		$this->a_vehicles = $data['vehicles'];
-		$this->itrv_id = $data['itrv_id'];
-		$this->squads_num = $data['squads_num'];
 		$this->active = $data['active'];
 		$this->owner = Engine::getInstance()->user->id;
+		$this->squads_num = $data['squads_num'];
+		$this->itrv_comment = $data['itrv_comment'];
+		$this->plan = $data['plan'];
+		$this->visability = $data['visability'];
 		
 		if ( $this->updateObjectToDB( array("itrv_id", "owner") )) {
-			return array('last_action' => "updated_successfully");
+			return true;
 		}
 		else {
-			return array('last_action' => "update_failed");
+			Log::put( print_r( Engine::getInstance()->db->errorInfo(), true) );
+			return false;
 		}
 	}
 	

@@ -29,6 +29,8 @@ VehiclesFilter = function() {
 		btnAdd.click( onAddVehicleButtonClick );
 		btnRemove = $('#removevehiclebutton');
 		btnRemove.click( onRemoveVehicleButtonClick );
+		
+		$('#submit').click( onSubmitInterviewClick );
 	};
 	
 /*****************************************************************/
@@ -180,4 +182,22 @@ VehiclesFilter = function() {
 		DrawSelectedVehicles();
 	}
 	
+	
+	/**
+	 * 
+	 */
+	function onSubmitInterviewClick() {
+		var data = new Object();
+		data['itrv_name'] = $('#itrv_name').val();
+		data['itrv_id'] = $('#itrv_id').val();
+		data['itrv_comment'] = $('#itrv_comment').val();
+		data['visability'] = $('input[name=visability]:checked').val();
+		data['vehicles'] = new Object();
+		
+		for (tank_id in SelectedVehicles) {
+			data.vehicles[ tank_id ] = SelectedVehicles[ tank_id ]['stat'];
+		}
+		
+		console.log( data );
+	}
 }
