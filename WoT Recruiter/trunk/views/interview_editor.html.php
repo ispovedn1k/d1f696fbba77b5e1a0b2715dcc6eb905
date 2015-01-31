@@ -67,7 +67,8 @@
 		<td width="40%">
 		<div class="helper">Щелкните по танку, и нажмите кнопку "Добавить", чтобы затребовать боевую единицу в команду.</div>
 		<div class="vehiclesbox">
-		<?php foreach ( $data as $vehicle ) : ?>
+		<?php
+		/* foreach ( $data as $vehicle ) : ?>
 			<div
 				data-type="<?php echo $vehicle->type;?>"
 				data-nation="<?php echo $vehicle->nation;?>"
@@ -82,7 +83,12 @@
 				<div class="contourbox"><img src="<?php echo $vehicle->contour_image;?>" alt="x" /></div>
 				<?php echo $vehicle->name_i18n;?>
 			</div>
-		<?php endforeach;?>
+		<?php endforeach;*/?>
+			<div class="vehicle {{type}}" id="vehicle_{{tank_id}}" data-tank_id="{{tank_id}}"
+				data-type="{{type}}" data-nation="{{nation}}" data-level="{{level}}">
+				<div class="contourbox"><img src="{{contour_image}}" alt="x" /></div>
+				{{name_i18n}}
+			</div>
 		</div>
 		<?php 
 		/** @todo
@@ -142,7 +148,8 @@
 </form>
 
 <script type="text/javascript">
-var x = new VehiclesFilter();
+$('.vehiclesbox').BuildVehiclesList();
+var x = new VehiclesInterview();
 x.init();
 
 

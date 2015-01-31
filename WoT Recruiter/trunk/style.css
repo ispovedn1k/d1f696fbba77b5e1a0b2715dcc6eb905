@@ -28,14 +28,14 @@ pre {
 
 .vehicle-preset {
 	display: inline-block;
-	width: 94px;
+	width: 95px;
 	margin: 0px;
 	padding-left: 4px;
 }
 
 textarea.commentbox {
 	width: 100%;
-	height:97px];
+	height:97px;
 	resize: none;
 }
 

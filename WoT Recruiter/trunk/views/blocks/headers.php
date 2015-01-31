@@ -9,7 +9,9 @@
 	
 	<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
-	<script type="text/javascript" src="js/vehicles_filter.js"></script>
+	<script type="text/javascript" src="js/vehiclesinterview.js"></script>
+	<script type="text/javascript" src="js/i18n/vehicles_ru.js"></script>
+	<script type="text/javascript" src="js/vehiclestemplate.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$('.spoiler').click(function(){

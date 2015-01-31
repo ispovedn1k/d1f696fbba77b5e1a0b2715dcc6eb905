@@ -1,4 +1,4 @@
-VehiclesFilter = function() {
+VehiclesInterview = function() {
 	
 	var Type = "all";
 	var Nation = "all";
@@ -77,14 +77,14 @@ VehiclesFilter = function() {
 		var sorted = new Object();
 		// Создадим сортированный список техники, чтобы не было радуги в выводе.
 		for (tank_id in SelectedVehicles) {
-			if ("undefined" === typeof sorted[ SelectedVehicles[ tank_id ]['type'] ]) {
-				sorted[ SelectedVehicles[ tank_id ]['type'] ] = '';
+			if ("undefined" === typeof sorted[ vehicles[ tank_id ]['type'] ]) {
+				sorted[ vehicles[ tank_id ]['type'] ] = '';
 			}
 			// Воспользуемся тем, что ширина поля вывода ограничена, и с помощью стилей
 			// организуем вывод в определенные позиции, чтобы было похоже на колонки.
-			sorted[ SelectedVehicles[ tank_id ]['type'] ] +=
-					"<span class='vehicle-preset " + SelectedVehicles[ tank_id ]['type'] + "'>" +
-							SelectedVehicles[ tank_id ]['name'] +
+			sorted[ vehicles[ tank_id ]['type'] ] +=
+					"<span class='vehicle-preset " + vehicles[ tank_id ]['type'] + "'>" +
+							vehicles[ tank_id ]['short_name_i18n'] +
 					"</span>";
 		}
 		for (type in sorted) {
@@ -129,15 +129,16 @@ VehiclesFilter = function() {
 		VehiclesBox.children('#vehicle_' + pointer).removeClass('pointed-vehicle');
 		
 		pointer = $this.data('tank_id');
-		VehicleStatBox.find('.vimg').attr('src', $this.data('img'));
-		VehicleStatBox.find('.vtype').html($this.data('type_i18n'));
-		VehicleStatBox.find('.vname').html($this.data('name_i18n'));
+		VehicleStatBox.find('.vimg').attr('src', vehicles[ pointer ]['image']);
+		VehicleStatBox.find('.vtype').html( vehicles[ pointer ]['type_i18n'] );
+		VehicleStatBox.find('.vname').html( vehicles[ pointer ]['name_i18n'] );
 		
 		$this.addClass('pointed-vehicle');
-
+		// если выбранная машина уже в списке
 		if ( typeof SelectedVehicles[ pointer ] !== "undefined" ) {
+			// зальем всю стату в поля
 			VehicleStatBox.find('input:text').each(function(){
-				$(this).val( SelectedVehicles[ pointer ]['stat'][ $(this).attr('name') ] );
+				$(this).val( SelectedVehicles[ pointer ][ $(this).attr('name') ] );
 			});
 			btnRemove.attr('disabled', false);
 		}
@@ -158,11 +159,7 @@ VehiclesFilter = function() {
 			vehStat[ $(this).attr('name') ] = $(this).val();
 		});
 		
-		SelectedVehicles[ pointer ] = {
-			name: SelectedVehicle.data('short'),
-			type: SelectedVehicle.data('type'),
-			stat: vehStat
-		}
+		SelectedVehicles[ pointer ] = vehStat;
 		
 		SelectedVehicle.addClass('selected-vehicle');
 		btnRemove.attr('disabled', false);
@@ -175,7 +172,7 @@ VehiclesFilter = function() {
 	 * Удаляет по указателю из кэша информацию о технике.
 	 */
 	function onRemoveVehicleButtonClick() {
-		SelectedVehicles[ pointer ] = undefined;
+		delete SelectedVehicles[ pointer ];
 		VehiclesBox.children('#vehicle_' + pointer).removeClass('selected-vehicle');
 		btnRemove.attr('disabled', true);
 		
@@ -192,11 +189,7 @@ VehiclesFilter = function() {
 		data['itrv_id'] = $('#itrv_id').val();
 		data['itrv_comment'] = $('#itrv_comment').val();
 		data['visability'] = $('input[name=visability]:checked').val();
-		data['vehicles'] = new Object();
-		
-		for (tank_id in SelectedVehicles) {
-			data.vehicles[ tank_id ] = SelectedVehicles[ tank_id ]['stat'];
-		}
+		data['vehicles'] = SelectedVehicles;
 		
 		console.log( data );
 	}
