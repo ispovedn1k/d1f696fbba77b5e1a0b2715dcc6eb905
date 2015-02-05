@@ -1,9 +1,123 @@
+// @todo: сделать нормальный универсальный полномасштабный шаблонизатор
+
 (function() {
+	
 	/**
-	 * Заполняет контейнер с шаблоном сведениями о всех танках
+	 * Заполняет указанные контейнеры данными по имени переменной указанной в data-collection.
+	 * Если это поле не заполнено, или переменная не доступна, данные на парсер можно
+	 * передать через параметр функции data.
+	 */
+	$.fn.Container = function( data ) {
+		/**
+		 * порядок приориета данных:
+		 * локальной считается запись data-collection с именем
+		 * поля, которое и будет разобрано в этом контейнере
+		 * данные, переденные через переменную data в вызове
+		 * будет разобраны в случае, если не удалось полуить данные
+		 * по локальной переменной. 
+		 */
+		$(this).each(function(index){
+			var $this = $(this);
+			var template = $this.data('ctemplate');
+			
+			if (! template ) {
+				// если шаблон не определен, определяем его и сохраняем
+				template = $this.html();
+				$this.data('ctemplate', template);
+			}
+			
+			var collection = $this.data('collection'); // определяется ключевым словом ~collection~
+			if ( collection ) {
+				collection = getData( collection.split('.') );
+			}
+			
+			if (! collection ) {
+				collection = data;
+			}
+			
+			if ("object" !== typeof collection) {
+				return this;
+			}
+			
+			// после чего очищаем контейнер
+			$this.empty(); // сейчас будем заполнять его по новой
+			
+			var nodehtml = '';
+			
+			for (key in collection) {
+				nodehtml = makeNode(template, key, collection);
+				// @optimisation: не вынести ли добавлени в контейнер из цикла? Будет работать быстрее?
+				$this.append( nodehtml );
+			}
+
+		});
+		
+		
+		function makeNode( template, key, collection ) {
+			var rx = /{{\s*([~\w\.]+)\s*}}/gm;
+			template = template.replace(rx, function(str, varname, offset, a){			
+				var varpath = varname.split('.');
+				return getData(varpath, key, collection);
+			});
+			return template;
+		}
+		
+		
+		function getData(path, key, collection, level) {
+			if ( undefined === path ) {
+				return null;
+			}
+			
+			if ( undefined === level ) {
+				level = 0;
+			}
+			
+			if (path.length === level) {
+				return collection;
+			}
+			
+			if (0 === level) {
+				switch(path[0]) {
+					case '~key~':
+						collection = key;
+						break;
+					case '~item~':
+						if (undefined === collection ) return undefined;
+						collection =  collection[ key ];
+						break;
+					case '~collection~':
+						break;
+					default:
+						collection = window[ path[0] ];
+				}
+			} else {
+				if ( undefined === collection ) {
+					return undefined;
+				}
+				
+				switch ( path[ level ] ) {
+					case '~key~':
+						collection = collection[ key ];
+						break
+					default:
+						collection = collection[ path[ level ] ];
+				}
+			}
+			
+			return getData(path, key, collection, ++level);
+		}
+	}
+	
+	
+	/**
+	 * Заполняет контейнер с шаблоном сведениями о танках
 	 * по заданному шаблону.
 	 */
-	$.fn.BuildVehiclesList = function() {
+	$.fn.BuildVehiclesList = function( vehicles ) {
+		// если список танков передан не был, плюемся всеми танками сразу
+		if (undefined === vehicles) {
+			vehicles = tankopedia.vehicles;
+		}
 		$(this).each(function(index){
 			// все что внутри, считается шаблоном и должно быть повторено
 			var $this = $(this);
@@ -13,9 +127,9 @@
 			$this.empty();
 			
 			// теперь надо копировать шаблон, заполняя его данными.
-			var v = sortedVehicles();
+			var v = tankopedia.sortedVehicles();
 			for (var i = 0; i < v.length; i++) {
-				$this.append( applyVehicle( v[i]['tank_id'], html_template ) );
+				$this.append( applyVehicle( v[i]['tank_id'], html_template, v[i] ) );
 			}
 		});
 		
@@ -24,7 +138,7 @@
 	
 	
 	/**
-	 * Заполняет шаблонные поля ноды данными
+	 * Заполняет шаблонные поля про танки ноды данными из танкопедии
 	 */
 	$.fn.Tankany = function() {
 		$(this).each(function(index){
@@ -41,74 +155,13 @@
 	
 	
 	/**
-	 * Вставляет данные в нужные поля в шаблоне
+	 * Вставляет данные из танкопедии в нужные поля в шаблоне
 	 */
 	function applyVehicle(tank_id, template) {
 		var rx = /{{\s*(\w+)\s*}}/gm;
 		template = template.replace(rx, function(str, p, offset, a){
-			return vehicles[ tank_id ] [ p ];
+			return tankopedia.vehicles[ tank_id ] [ p ];
 		});
 		return template;
-	}
-	
-	
-	/**
-	 * Создает сортированный список техники
-	 */
-	function sortedVehicles(v) {
-		var presort = new Object();
-		var level = 0;
-		var type = '';
-		var nation = '';
-		
-		var types = ['lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG'];
-		var nations = ['ussr', 'germany', 'usa', 'france', 'china', 'uk', 'japan'];
-		
-		var sorted = [];
-		
-		if (undefined === v) {
-			v = vehicles;
-		}
-		
-		for ( tank_id in v ) {
-			level = v[ tank_id ]['level'];
-			type = v[ tank_id ]['type'];
-			nation = v[ tank_id ]['nation'];
-			
-			if (undefined === presort[ level ]) {
-				presort[ level ] = new Object();
-			}
-			
-			if (undefined === presort[ level ][ type ]) {
-				presort[ level ][ type ] = new Object();
-			}
-			
-			if (undefined === presort[ level ][ type ][ nation ]) {
-				presort[ level ][ type ][ nation ] = new Object();
-			}
-			
-			presort[ level ][ type ][ nation ][ tank_id ] = v[ tank_id ];
-		}
-		
-		
-		for (var L = 1; L <= 10; L++ ) {
-			if (undefined !== presort[L]) {
-				for (var t = 0; t < 5; t++) {
-					T = types[t];
-					if (undefined !== presort[L][T]) {
-						for (var n = 0; n < 7; n++) {
-							N = nations[n];
-							if( undefined !== presort[L][T][N]) {
-								for( tank_id in presort[L][T][N]) {
-									sorted.push(v[tank_id]);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return sorted;
 	}
 })();

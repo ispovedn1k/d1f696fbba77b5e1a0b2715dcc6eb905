@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/vehiclesinterview.js"></script>
+	<script type="text/javascript" src="js/tankopedia.js"></script>
 	<script type="text/javascript" src="js/i18n/vehicles_ru.js"></script>
 	<script type="text/javascript" src="js/vehiclestemplate.js"></script>
 	<script type="text/javascript">
@@ -18,6 +19,8 @@
 				$(this).children('.spoiler-body').toggle(500);
 			});
 		});
+
+		var tankopedia = new Tankopedia();
 	</script>
 </head>
 <body>

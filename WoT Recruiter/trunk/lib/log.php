@@ -33,4 +33,9 @@ abstract class Log {
 		
 		return self::$_logMessages[ $message_id ];
 	}
+	
+	
+	public static function getAll() {
+		return self::$_logMessages;
+	}
 }

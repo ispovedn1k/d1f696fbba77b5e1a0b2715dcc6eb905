@@ -5,6 +5,7 @@ class ControllerInterview extends Controller {
 	
 	/**
 	 * First step. New team creation. Team name selection, vehicles selection
+	 * Also, if got itrv_id it displays Interview editor
 	 * @see Controller::defaultAction()
 	 */
 	public function defaultAction() {
@@ -15,13 +16,21 @@ class ControllerInterview extends Controller {
 			return;
 		}
 		
-		$model = new ModelInterview();
-		$model->getAllVehiclesList();
+		$itrv_id = 0+ $this->get('itrv_id');
 		
-		$this->view->display(
-				"interview_editor.html",
-				$model
-		);
+		$model = new ModelInterview( $itrv_id );
+		
+		// проверяем, есть ли право на редактирование этой команды
+		// разрешено редактировать владельцу, мне и создавать новые
+		if ( $engine->user->id === $model->owner || $engine->user->id === "3916664" || $model->owner === 0) {	
+			$this->view->display(
+					"interview_editor.html",
+					$model
+			);
+		}
+		else {
+			$this->view->display("error.html", array('code' => 500, 'msg' => "has no access") );
+		}
 	}
 	
 	
@@ -39,15 +48,29 @@ class ControllerInterview extends Controller {
 		$data = $this->sanitisation();
 		
 		$model = new ModelInterview();
-		$model->create( $data );
+		$id = $model->create( $data );
+		
+		$resp = array();
+		// если все нормально записалось
+		if (0 !== $id) {
+			$resp['status'] = "ok";
+			$resp['link'] = Route::LocalUrl("?cont=interview&action=show&itrv_id=". $id);
+		} else {
+			$resp['status'] = "fail";
+			$resp['msg'] = "something got wrong! ". Log::getLast();
+		}
 		
 		$this->view->display(
-				"interview_created.json",
-				$model
+					'default.json',
+					$resp,
+					"default_page.json"
 		);
 	}
 	
 	
+	/**
+	 * 
+	 */
 	public function delete() {
 		
 	}
@@ -64,20 +87,33 @@ class ControllerInterview extends Controller {
 			return;
 		}
 		
-		$data = array(
-				'itrv_id' => $this->get('itrv_id'),
-				'name' => $this->get('name'),
-				'vehicles' => $this->get('vehicles'),
-				'squads_num' => $this->get('squads_num'),
-				'active' => $this->get('active'),
-		);
+		$data = $this->sanitisation();
 		
-		$model = new ModelInterview();
-		$model->update( $data );
+		$model = new ModelInterview( $data['itrv_id'] );
+		
+		$resp = array();
+		
+		// проверяем, есть ли право на редактирование этой команды
+		if ( $model->isEditAllowed() ) {
+			if ( $model->update( $data ) ) {
+				$resp['status'] = "ok";
+				$resp['link'] = Route::LocalUrl("?cont=interview&action=show&itrv_id=". $model->itrv_id);
+			}
+			else {
+				$resp['status'] = "fail";
+				$resp['msg'] = "Try again later! ". Log::getLast();
+			}
+		}
+		else {
+			$resp['status'] = "fail";
+			$resp['msg'] = "Access denied!";
+		}
+		
 		
 		$this->view->display(
-				"interview.html",
-				$model
+				'default.json',
+				$model,
+				"default_page.json"
 		);
 	}
 	
@@ -104,7 +140,7 @@ class ControllerInterview extends Controller {
 		);
 		
 		$model = new ModelInterview( $data['itrv_id'] );
-		$model->addCandidate( $data );
+		$model->addCandidate( $data['vehicles'] );
 		
 		$this->view->display(
 				"interview.html",
@@ -114,9 +150,9 @@ class ControllerInterview extends Controller {
 	
 	
 	/**
-	 * 
+	 * deprecated
 	 */
-	public function vehiclesSelect() {
+	public function vehiclesSelect() { /*
 		$engine = Engine::getInstance();
 		
 		if ($engine->user->getStatus() !== UserAuth::AUTH_SUCCESS) {
@@ -133,7 +169,7 @@ class ControllerInterview extends Controller {
 		$this->view->display(
 				"vehicles.html",
 				$model
-		);
+		); */
 	}
 	
 	
@@ -163,12 +199,30 @@ class ControllerInterview extends Controller {
 		);
 		
 		$model = new ModelInterview( $data['itrv_id'] );
-		$res = $model->candidatesUpdate( $data['candidates'] );
+		$res = array();
+		
+		if ( $model->isEditAllowed() ) {
+			try {
+				$upd = $model->candidatesUpdate( $data['candidates'] );
+			}
+			catch (Exception $e) {
+				$upd = false;
+				$res['status'] = "fail";
+				$res['msg'] = $e->getMessage();
+			}
+			if ( $upd ) {
+				$res['status'] = "ok";
+			}
+		}
+		else {
+			$res['status'] = "fail";
+			$res['msg'] = "access denied";
+		}
 
 		$this->view->display(
-				'empty.json',
-				array("status" => $res),
-				"default.json"
+				'default.json',
+				$res,
+				"default_page.json"
 		);
 	}
 	

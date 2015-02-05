@@ -79,6 +79,10 @@ textarea.commentbox {
 }
 
 /******************************************************/
+#requiredVehicles{
+	width: 100%;
+}
+
 .squad-box {
 	border: 1px solid #888888;
 	width: 480px;

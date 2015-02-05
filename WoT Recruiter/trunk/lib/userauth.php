@@ -134,7 +134,6 @@ class UserAuth {
 					`blocked`,
 					`loginHash`,
 					`lastIp`,
-					`lastUpdated`,
 					`access_token`,
 					`expires` )
 				VALUES (
@@ -144,7 +143,6 @@ class UserAuth {
 					'". (int) $this->blocked . "',
 					'". addslashes( $this->loginHash ). "',
 					'". addslashes( $this->lastIp ). "',
-					CURRENT_TIMESTAMP,
 					'". addslashes( $this->access_token ) ."',
 					". (0 + $this->expires) ."		
 				);";

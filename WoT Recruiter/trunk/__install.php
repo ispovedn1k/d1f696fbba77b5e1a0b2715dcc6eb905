@@ -17,7 +17,7 @@ try {
 			`blocked` BOOLEAN(1),
 			`loginHash` VARCHAR(32) NOT NULL,
 			`lastIp` VARCHAR(16),
-			`lastUpdated` TEXT NOT NULL,
+			`lastUpdated` TEXT,
 			`access_token` VARCHAR(42),
 			`expires` INTEGER(10)
 		);";

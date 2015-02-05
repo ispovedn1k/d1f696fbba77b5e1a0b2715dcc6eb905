@@ -3,6 +3,7 @@
 <script type="text/javascript">
 var moves = new Object();
 $(function() {
+	<? if ( $data->isEditAllowed() ) : ?>
 	$('.squad-box').sortable({
 		connectWith: ".squad-box",
 		stop: function(event, ui){
@@ -12,7 +13,8 @@ $(function() {
 		},
 	});
 	$('.squad-box').disableSelection();
-
+	<? endif; ?>
+	
 	// @warning! Костыль!
 	$('#squadsupdate').click(function() {
 		$.post('?cont=interview&action=candidatesUpdate',
@@ -37,6 +39,7 @@ $(function() {
 
 
 <?php
+// расписываем кандидатов по отрядам
 foreach( $data->_candidates as $candidate) {
 	ob_start();
 	?>

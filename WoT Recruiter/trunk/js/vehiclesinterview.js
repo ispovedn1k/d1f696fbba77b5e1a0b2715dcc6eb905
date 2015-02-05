@@ -31,6 +31,7 @@ VehiclesInterview = function() {
 		btnRemove.click( onRemoveVehicleButtonClick );
 		
 		$('#submit').click( onSubmitInterviewClick );
+		$('#selectedVehicles').Container( SelectedVehicles );
 	};
 	
 /*****************************************************************/
@@ -73,18 +74,19 @@ VehiclesInterview = function() {
 	 * 
 	 */
 	function DrawSelectedVehicles() {
+		/*
 		var html_selectedVehicles = '';
 		var sorted = new Object();
 		// Создадим сортированный список техники, чтобы не было радуги в выводе.
 		for (tank_id in SelectedVehicles) {
-			if ("undefined" === typeof sorted[ vehicles[ tank_id ]['type'] ]) {
-				sorted[ vehicles[ tank_id ]['type'] ] = '';
+			if ("undefined" === typeof sorted[ tankopedia['vehicles'][ tank_id ]['type'] ]) {
+				sorted[ tankopedia['vehicles'][ tank_id ]['type'] ] = '';
 			}
 			// Воспользуемся тем, что ширина поля вывода ограничена, и с помощью стилей
 			// организуем вывод в определенные позиции, чтобы было похоже на колонки.
-			sorted[ vehicles[ tank_id ]['type'] ] +=
-					"<span class='vehicle-preset " + vehicles[ tank_id ]['type'] + "'>" +
-							vehicles[ tank_id ]['short_name_i18n'] +
+			sorted[ tankopedia['vehicles'][ tank_id ]['type'] ] +=
+					"<span class='vehicle-preset " + tankopedia['vehicles'][ tank_id ]['type'] + "'>" +
+							tankopedia['vehicles'][ tank_id ]['short_name_i18n'] +
 					"</span>";
 		}
 		for (type in sorted) {
@@ -92,6 +94,9 @@ VehiclesInterview = function() {
 		}
 		
 		$('#selectedVehicles').html( html_selectedVehicles );
+		*/
+		$('#selectedVehicles').Container( SelectedVehicles );
+		$('#selectedVehicles').children('.vehicle-preset').click( onVehicleClick );
 	}
 	
 	
@@ -126,12 +131,12 @@ VehiclesInterview = function() {
 	 */
 	function onVehicleClick() {
 		var $this = $(this);
-		VehiclesBox.children('#vehicle_' + pointer).removeClass('pointed-vehicle');
+		$('.vehicle').removeClass('pointed-vehicle');
 		
 		pointer = $this.data('tank_id');
-		VehicleStatBox.find('.vimg').attr('src', vehicles[ pointer ]['image']);
-		VehicleStatBox.find('.vtype').html( vehicles[ pointer ]['type_i18n'] );
-		VehicleStatBox.find('.vname').html( vehicles[ pointer ]['name_i18n'] );
+		VehicleStatBox.find('.vimg').attr('src', tankopedia['vehicles'][ pointer ]['image']);
+		VehicleStatBox.find('.vtype').html( tankopedia['vehicles'][ pointer ]['type_i18n'] );
+		VehicleStatBox.find('.vname').html( tankopedia['vehicles'][ pointer ]['name_i18n'] );
 		
 		$this.addClass('pointed-vehicle');
 		// если выбранная машина уже в списке
@@ -191,6 +196,21 @@ VehiclesInterview = function() {
 		data['visability'] = $('input[name=visability]:checked').val();
 		data['vehicles'] = SelectedVehicles;
 		
-		console.log( data );
+		$.post(
+			"?cont=interview&action=create",
+			data,
+			function( response ){
+				if ("object" != typeof response) {
+					alert("Epic fail! WTF was that?\n" + response);
+					return;
+				}
+				
+				if ("ok" === response.status ) {
+					location.href = response.link;
+				} else {
+					alert( response.msg );
+				}
+			},
+			"json")
 	}
 }

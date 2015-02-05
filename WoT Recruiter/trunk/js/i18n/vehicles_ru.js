@@ -1,4 +1,7 @@
-﻿vehicles = {
+﻿Tankopedia.prototype = {
+	nations: ['ussr', 'germany', 'usa', 'france', 'china', 'uk', 'japan'],
+	types: ['lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG'],
+	vehicles: {
         "1": {
             "nation_i18n": "СССР",
             "name": "#ussr_vehicles:T-34",
@@ -5715,3 +5718,4 @@
             "tank_id": 64817
         }
     }
+}

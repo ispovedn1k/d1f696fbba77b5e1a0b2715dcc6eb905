@@ -18,7 +18,11 @@
 			</div>
 		</td>
 		<td>Запрошенная Вами техника:
-			<div id="selectedVehicles"></div>
+			<div id="selectedVehicles">
+				<span class="vehicle vehicle-preset {{tankopedia.vehicles.~key~.type}}" data-tank_id="{{~key~}}">
+					{{tankopedia.vehicles.~key~.short_name_i18n}}
+				</span>
+			</div>
 		</td>
 		<td>
 			<div class="helper">Добавьте описание</div>
@@ -66,28 +70,11 @@
 		</td>
 		<td width="40%">
 		<div class="helper">Щелкните по танку, и нажмите кнопку "Добавить", чтобы затребовать боевую единицу в команду.</div>
-		<div class="vehiclesbox">
-		<?php
-		/* foreach ( $data as $vehicle ) : ?>
-			<div
-				data-type="<?php echo $vehicle->type;?>"
-				data-nation="<?php echo $vehicle->nation;?>"
-				data-level="<?php echo $vehicle->lvl;?>"
-				data-tank_id="<?php echo $vehicle->tank_id;?>"
-				data-type_i18n="<?php echo $vehicle->type_i18n;?>"
-				data-name_i18n="<?php echo $vehicle->name_i18n;?>"
-				data-short="<?php echo $vehicle->short_name_i18n;?>"
-				data-img="<?php echo $vehicle->image;?>"
-				class="vehicle <?php echo $vehicle->type;?>"
-				id="vehicle_<?php echo $vehicle->tank_id;?>">
-				<div class="contourbox"><img src="<?php echo $vehicle->contour_image;?>" alt="x" /></div>
-				<?php echo $vehicle->name_i18n;?>
-			</div>
-		<?php endforeach;*/?>
-			<div class="vehicle {{type}}" id="vehicle_{{tank_id}}" data-tank_id="{{tank_id}}"
-				data-type="{{type}}" data-nation="{{nation}}" data-level="{{level}}">
-				<div class="contourbox"><img src="{{contour_image}}" alt="x" /></div>
-				{{name_i18n}}
+		<div class="vehiclesbox" data-collection="">
+			<div class="vehicle {{~item~.type}}" id="vehicle_{{~item~.tank_id}}" data-tank_id="{{~item~.tank_id}}"
+				data-type="{{~item~.type}}" data-nation="{{~item~.nation}}" data-level="{{~item~.level}}">
+				<div class="contourbox"><img src="{{~item~.contour_image}}" alt="x" /></div>
+				{{~item~.name_i18n}}
 			</div>
 		</div>
 		<?php 
@@ -132,6 +119,10 @@
 					<input type="text" id="avg_spoted" name="avg_spoted" />
 				</label>
 				<br />
+				<label>выживаемость:
+					<input type="text" id="avg_surv" name="avg_surv" />
+				</label>
+				<br />
 				<label>Требуется единиц:
 					<input type="text" id="num_required" name="num_required" />
 				</label>
@@ -148,7 +139,7 @@
 </form>
 
 <script type="text/javascript">
-$('.vehiclesbox').BuildVehiclesList();
+$('.vehiclesbox').Container( tankopedia.sortedVehicles() );
 var x = new VehiclesInterview();
 x.init();
 

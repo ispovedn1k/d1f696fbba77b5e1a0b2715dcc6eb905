@@ -1,26 +1,43 @@
 <h4>Список техники:</h4>
-<?php if (! $data->isMember() ) : ?> 
-<form action="?cont=interview&action=join" method="post">
-	<input type="hidden" name="itrv_id" value="<?php echo $data->itrv_id;?>" />
-	<div class="vehiclesbox">
-		<?php foreach ( $data->a_vehicles as $vehicle ) : ?>
-			<div data-type="<?php echo $vehicle->type;?>" data-nation="<?php echo $vehicle->nation;?>" data-level="<?php echo $vehicle->lvl;?>"
-				class="vehicle <?php echo $vehicle->type;?>"><label>
-				<input type="checkbox" name="vehicles[]" value="<?php echo $vehicle->tank_id;?>" />
-				<?php echo $vehicle->name_i18n;?>
-			</label></div>
-		<?php endforeach;?>
-	</div>
-	
-	<input type="submit" name="join" value="Записаться" />
-</form>
-<?php else : ?>
-<div class="vehiclesbox">
-	<?php foreach ( $data->a_vehicles as $vehicle ) : ?>
-		<div data-type="<?php echo $vehicle->type;?>" data-nation="<?php echo $vehicle->nation;?>" data-level="<?php echo $vehicle->lvl;?>"
-			class="vehicle <?php echo $vehicle->type;?>">
-			<label><?php echo $vehicle->name_i18n;?></label>
-		</div>
-	<?php endforeach;?>
-</div>
+<form action="<?php echo Route::LocalUrl("?cont=interview&action=join&itrv_id=". $data->itrv_id);?>" method="post">
+<table id="requiredVehicles">
+	<caption>Ваши характиристики / требуемый минимум:</caption>
+	<thead>
+		<tr>
+			<th></th>
+			<th>техника</th>
+			<th>количество</th>
+			<th>боев</th>
+			<th>побед</th>
+			<th>урон</th>
+			<th>попаданий</th>
+			<th>обнаружено</th>
+			<th>выживаемость</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr data-tank_id="{{~key~}}">
+			<td>
+				<?php if (! $data->isMember() ) : ?>
+				<input type="checkbox" name="vehicles[]" value="{{~key~}}"/>
+				<?php endif;?>
+			</td>
+			<td><span class="vehicle {{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.name_i18n}}</span></td>
+			<td>/ {{~item~.num_required}}</td>
+			<td>/ {{~item~.battles}}</td>
+			<td>/ {{~item~.winrate}}</td>
+			<td>/ {{~item~.avg_damage}}</td>
+			<td>/ {{~item~.avg_hits}}</td>
+			<td>/ {{~item~.avg_spoted}}</td>
+			<td>/ {{~item~.avg_surv}}</td>
+		</tr>
+	</tbody>
+</table>
+<?php if (! $data->isMember() ) : ?>
+<input type="submit" name="join" value="Записаться" />
 <?php endif;?>
+</form>
+
+<script type="text/javascript">
+	$('#requiredVehicles tbody').Container(<?php echo json_encode( $data->a_vehicles );?>);
+</script>

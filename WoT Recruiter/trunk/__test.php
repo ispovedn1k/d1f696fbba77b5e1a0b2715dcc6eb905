@@ -11,13 +11,11 @@ try {
 	
 	$db = $engine->db;
 	
-	$info = UsersVehiclesStatStrict::RequestVehiclesStatInfo(3916664, "373e2b193684c2a1fb3fd516fb33e715bb5a53d6");
+	$res = $db->query( "SELECT * FROM `candidates`;");
 	
-	echo "Request to WG completed. Now saving...";
+	$rows = $res->fetchAll();
 	
-	$res = UsersVehiclesStatStrict::SaveVehiclesStatInfo( $info );
-	
-	echo "<pre>". print_r($res, true). "</pre>";
+	echo "<pre>". print_r($rows, true). "</pre>";
 	
 	echo "completed success";
 }

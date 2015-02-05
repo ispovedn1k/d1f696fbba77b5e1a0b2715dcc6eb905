@@ -26,6 +26,7 @@ class ModelInterview extends UniqDBObjectModel {
 		parent::__construct( Engine::getInstance()->db->tables("interviews") );
 		
 		if (0 === $itrv_id) {
+			$this->owner = 0;
 			return;
 		}
 		
@@ -72,8 +73,8 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->plan = $data['plan'];
 		$this->visability = $data['visability'];
 		
-		if ( $this->insertObjectToDB(array("itrv_id")) ){
-			Engine::getInstance()->db->lastInsertId();
+		if ( false !== $this->insertObjectToDB(array("itrv_id")) ){
+			return Engine::getInstance()->db->lastInsertId();
 		}
 		else {
 			Log::put( print_r( Engine::getInstance()->db->errorInfo(), true) );
@@ -90,13 +91,13 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->itrv_name = $data['itrv_name'];
 		$this->a_vehicles = $data['vehicles'];
 		$this->active = $data['active'];
-		$this->owner = Engine::getInstance()->user->id;
+		// $this->owner = Engine::getInstance()->user->id; // отключим, чтобы пользователь не менялся
 		$this->squads_num = $data['squads_num'];
 		$this->itrv_comment = $data['itrv_comment'];
 		$this->plan = $data['plan'];
 		$this->visability = $data['visability'];
 		
-		if ( $this->updateObjectToDB( array("itrv_id", "owner") )) {
+		if ( $this->updateObjectToDB( array("itrv_id"/*, "owner"*/) )) {
 			return true;
 		}
 		else {
@@ -114,7 +115,7 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->itrv_id = $itrv_id;
 		if ( $this->loadObjectFromDB( 'itrv_id') ) {
 			$this->loadCandidates();
-			$this->a_vehicles = $this->loadVehicles();
+			//$this->a_vehicles = $this->loadVehicles();
 		}
 		return false;
 	}
@@ -124,7 +125,7 @@ class ModelInterview extends UniqDBObjectModel {
 	 * @param array $candidate
 	 * @return boolean
 	 */
-	public function addCandidate( $candidate ) {
+	public function addCandidate( $vehicles ) {
 		$db = Engine::getInstance()->db;
 		$user = Engine::getInstance()->user;
 		
@@ -135,7 +136,7 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->_candidates[ $user->id ] = Candidate::Init(
 				$user,
 				$this->itrv_id,
-				$candidate['vehicles']
+				$vehicles
 		);
 	
 		$sql = "INSERT INTO `". $db->tables("candidates") ."` (
@@ -143,11 +144,11 @@ class ModelInterview extends UniqDBObjectModel {
 				'". addslashes( $user->id ) ."',
 				'". addslashes($user->personName) ."',
 				'". (0 + $this->itrv_id) ."',
-				'". addslashes( serialize( $candidate['vehicles'] ) ) ."');";
+				'". addslashes( serialize( $vehicles ) ) ."');";
 		if ( $db->query( $sql ) ) {
 			return true;
 		}
-		$this->_last_operation = "add candidate error". print_r($db->errorInfo(), true);
+		Log::put( "add candidate error". print_r($db->errorInfo(), true) );
 		return false;
 	}
 	
@@ -170,8 +171,8 @@ class ModelInterview extends UniqDBObjectModel {
 		$candidates = $res->fetchAll(PDO::FETCH_CLASS, 'Candidate');
 		
 		foreach ( $candidates as $row) {
-			$a_vehicles = unserialize( $row->a_vehicles );
-			$row->a_vehicles = $this->loadVehicles( $a_vehicles );
+			$row->a_vehicles = unserialize( stripslashes( $row->a_vehicles ) );
+			//$row->a_vehicles = $this->loadVehicles( $a_vehicles );
 			$this->_candidates[ $row->user_id ] = $row;
 		}
 		return true;
@@ -242,5 +243,15 @@ class ModelInterview extends UniqDBObjectModel {
 			));
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * @return boolean
+	 */
+	public function isEditAllowed() {
+		$engine = Engine::getInstance();
+		// разрешено владельцу и мне
+		return $engine->user->id === $this->owner || $engine->user->id === "3916664";
 	}
 } 
