@@ -4,7 +4,12 @@
 class ControllerSearch extends Controller {
 	
 	public function find() {
-		$this->view->display("indevel.html");
+		$model = new ModelSearch();
+		
+		$this->view->display(
+				"search_result.html",
+				$model->getAll()
+		);
 	}
 	
 	

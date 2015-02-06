@@ -17,4 +17,6 @@ abstract class Secrets {
 			return "sqlite:". self::DB_BASE . ".db";
 		}
 	}
+	
+	public static $blessed = array("3916664");
 }

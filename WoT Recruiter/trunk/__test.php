@@ -11,11 +11,14 @@ try {
 	
 	$db = $engine->db;
 	
-	$rows = UsersVehiclesStatStrict::RequestVehiclesStatInfo( 3916664, "34fc55913d3b795052af46310e60f666f6c73182" );
+	//$rows = UsersVehiclesStatStrict::RequestVehiclesStatInfo( 3916664, "34fc55913d3b795052af46310e60f666f6c73182" );
 	
-	UsersVehiclesStatStrict::SaveVehiclesStatInfo( $rows );
+	//UsersVehiclesStatStrict::SaveVehiclesStatInfo( $rows );
+	$res = $db->query( "SELECT * FROM users WHERE id = 100;" );
 	
-	echo "<pre>". print_r($rows, true). "</pre>";
+	$rows = $res->fetch();
+	
+	echo "<pre>". var_dump($rows). "</pre>";
 	
 	echo "completed success";
 }

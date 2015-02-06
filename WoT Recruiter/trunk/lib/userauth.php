@@ -194,32 +194,51 @@ class UserAuth {
 	
 	
 	public function updatePlayerStat( $force = false ) {
-			$enforce = '';
-			$time = time();
-			
-			// запрещаем обновление чаще чем раз в сутки
-			if (( $time - $this->lastForceUpdated )< ( 60 * 60 * 24 ) ) {
-				return false;
-			}
-			
-			$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $this->id, $this->access_token );
-			UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
-			$this->lastUpdated = $time;
-			
-			if ( $force ) {
-				$this->lastForceUpdated = $time;
-				$enforce = " `lastForceUpdated` = ". $this->lastForceUpdated . " ,";
-			}
-			
-			$db = Engine::getInstance()->db;
-			
-			$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
-				{$enforce}
-				`lastUpdated` = ". $this->lastUpdated . "
-				
-				WHERE `id` = ". $this->id . ";";
+		ModelQueue::addTask(
+			"updateUserStat",
+			array(
+				'user_id' => $this->id,
+				'access_token' => $this->access_token
+			)
+		);
 		
+		if ( $force ) {
+			$this->lastForceUpdated = time();
+			$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+				`lastForceUpdated` = ". $this->lastForceUpdated . " ,
+			
+				WHERE `id` = ". $this->id . ";";
+			
 			return $db->query( $sqlUpdate );
+		}
+		/*	
+		$enforce = '';
+		$time = time();
+		
+		// запрещаем обновление чаще чем раз в сутки
+		if (( $time - $this->lastForceUpdated )< ( 60 * 60 * 24 ) ) {
+			return false;
+		}
+		
+		$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $this->id, $this->access_token );
+		UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
+		$this->lastUpdated = $time;
+		
+		if ( $force ) {
+			$this->lastForceUpdated = $time;
+			$enforce = " `lastForceUpdated` = ". $this->lastForceUpdated . " ,";
+		}
+		
+		$db = Engine::getInstance()->db;
+		
+		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+			{$enforce}
+			`lastUpdated` = ". $this->lastUpdated . "
+			
+			WHERE `id` = ". $this->id . ";";
+	
+		return $db->query( $sqlUpdate );
+		*/
 	}
 	
 	

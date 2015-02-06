@@ -69,7 +69,7 @@ try {
 		throw new ErrorException( print_r( $db->errorInfo()) );
 	}
 	
-	$sql = "CREATE UNIQUE INDEX `tank_id` on `". $db->tables("vehicles_". LANG) ."` (`tank_id`);";
+	$sql = "CREATE UNIQUE INDEX IF NOT EXISTS `tank_id` on `". $db->tables("vehicles_". LANG) ."` (`tank_id`);";
 	if (false === $db->query( $sql )) {
 		throw new ErrorException( print_r( $db->errorInfo()) );
 	}
@@ -114,13 +114,25 @@ try {
 			`survived_battles`	INTEGER(10),
 			`dropped_capture_points` INTEGER(10)
 		);";
-	$sql .= "CREATE UNIQUE INDEX `ui_vehinfo` ON `". $db->tables("users_vehicles"). "` (`tank_id`, `account_id`, `battle_type`);";
+	$sql .= "CREATE UNIQUE INDEX IF NOT EXISTS `ui_vehinfo` ON `". $db->tables("users_vehicles"). "` (`tank_id`, `account_id`, `battle_type`);";
 	if (false === $db->query( $sql )) {
 		throw new ErrorException( print_r( $db->errorInfo()) );
 	}
 	
-	$model = new ModelSyncVehicles();
-	$model->execute();
+	$sql = "CREATE TABLE IF NOT EXISTS `". $db->tables("queue") ."` (
+			`id`			INTEGER PRIMARY KEY AUTOINCREMENT,
+			`callName`		TEXT NOT NULL,
+			`params`		TEXT,
+			`shots`			INTEGER,
+			`done`			BOOLEAN,
+			`execmicrotime`	INTEGER
+		);";
+	if (false === $db->query( $sql )) {
+		throw new ErrorException( print_r( $db->errorInfo()) );
+	}
+	
+	// $model = new ModelSyncVehicles();
+	// $model->execute();
 	
 	echo "DONE! Completed successfully!". PHP_EOL;
 }
