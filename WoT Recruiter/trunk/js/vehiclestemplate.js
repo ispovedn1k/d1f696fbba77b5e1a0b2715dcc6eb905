@@ -57,7 +57,11 @@
 			var rx = /{{\s*([~\w\.]+)\s*}}/gm;
 			template = template.replace(rx, function(str, varname, offset, a){			
 				var varpath = varname.split('.');
-				return getData(varpath, key, collection);
+				var fixed = getData(varpath, key, collection);
+				if (undefined === fixed) {
+					fixed = '--';
+				}
+				return fixed;
 			});
 			return template;
 		}
@@ -65,7 +69,7 @@
 		
 		function getData(path, key, collection, level) {
 			if ( undefined === path ) {
-				return null;
+				return undefined;
 			}
 			
 			if ( undefined === level ) {

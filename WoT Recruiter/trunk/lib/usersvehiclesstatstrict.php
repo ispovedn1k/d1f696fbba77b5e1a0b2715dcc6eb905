@@ -245,10 +245,18 @@ class UsersVehiclesStatStrict extends UsersVehiclesStat {
 		
 		$responce = array();
 		foreach ( $res->fetchAll(PDO::FETCH_CLASS, 'UsersVehiclesStatStrict') as $row ) {
+			$row->total_frags = unserialize( $row->total_frags );
+			/* попробуем вариант без обработки, тупо скинем все кучей. Обработаем на стороне клиента на JS.
+			 * Один хрен ему передавать все.
 			if (! $responce[ $row->tank_id ] ) {
 				$responce[ $row->tank_id ] = array();
 			}
-			$responce[ $row->tank_id ][ $row->battle_type ] = $row;
+			if (! $responce[ $row->tank_id ][ $row->battle_type ] ) {
+				$responce[ $row->tank_id ][ $row->battle_type ] = array();
+			}
+			$responce[ $row->tank_id ][ $row->battle_type ][] = $row;
+			*/
+			$responce[] = $row;
 		}
 		
 		return $responce;

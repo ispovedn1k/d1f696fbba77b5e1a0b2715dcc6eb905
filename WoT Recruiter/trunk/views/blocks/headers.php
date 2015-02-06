@@ -13,11 +13,20 @@
 	<script type="text/javascript" src="js/tankopedia.js"></script>
 	<script type="text/javascript" src="js/i18n/vehicles_ru.js"></script>
 	<script type="text/javascript" src="js/vehiclestemplate.js"></script>
+	<script type="text/javascript" src="js/candidatesstat.js"></script>
+	<script type="text/javascript" src="js/squads.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$('.spoiler').click(function(){
 				$(this).children('.spoiler-body').toggle(500);
 			});
+
+			$.get("<?php echo Route::LocalUrl("?cont=userstat");?>",
+				{},
+				function (data) {
+					// alert(data.status);
+				},
+				"json");
 		});
 
 		var tankopedia = new Tankopedia();

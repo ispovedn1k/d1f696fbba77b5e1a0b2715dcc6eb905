@@ -3,17 +3,26 @@
 
 class ControllerUserStat extends Controller {
 	
-	public function execute() {
-		$user_id = $this->get('user_id');
-		$tanks_id = $this->get('tanks_id');
+	
+	public function defaultAction() {
+		$user = Engine::getInstance()->user;
+		if ( UserAuth::AUTH_SUCCESS === $user->getStatus() ) {
+			if ( $user->isStatUp2Date() ) {
+				$user->updatePlayerStat();
+			}
+		}
 		
-		$statInfo = UsersVehiclesStatStrict::loadVehiclesStatInfo( $user_id, $tanks_id );
+		$this->view->display('default.json', array('status' => "ok"), "default_page.json");
+	}
+	
+	
+	public function forceUpdate() {
+		$user = Engine::getInstance()->user;
+		if ( UserAuth::AUTH_SUCCESS === $user->getStatus() ) {
+			$user->updatePlayerStat( true );
+		}
 		
-		$this->view->display(
-				'empty.json',
-				$statInfo,
-				"default.json"
-		);
+		$this->view->display('default.json', array('status' => "ok"), "default_page.json");
 	}
 }
 

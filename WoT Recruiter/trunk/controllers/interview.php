@@ -142,6 +142,8 @@ class ControllerInterview extends Controller {
 		$model = new ModelInterview( $data['itrv_id'] );
 		$model->addCandidate( $data['vehicles'] );
 		
+		$model->getUsersStat();
+		
 		$this->view->display(
 				"interview.html",
 				$model
@@ -150,34 +152,12 @@ class ControllerInterview extends Controller {
 	
 	
 	/**
-	 * deprecated
-	 */
-	public function vehiclesSelect() { /*
-		$engine = Engine::getInstance();
-		
-		if ($engine->user->getStatus() !== UserAuth::AUTH_SUCCESS) {
-			$this->view->display(View::CONT_AUTH_NEEDED);
-			return;
-		}
-		
-		$data = array(
-				'itrv_id' => $this->get('itrv_id'),
-		);
-		
-		$model = new ModelInterview( $data['itrv_id'] );
-
-		$this->view->display(
-				"vehicles.html",
-				$model
-		); */
-	}
-	
-	
-	/**
 	 * 
 	 */
 	public function show() {
 		$model = new ModelInterview( 0+ $this->get('itrv_id') );
+		$model->getUsersStat();
+		
 		$this->view->display(
 				"interview.html",
 				$model
@@ -252,7 +232,7 @@ class ControllerInterview extends Controller {
 		
 		$data['itrv_id'] = 0+ $this->get('itrv_id');
 		
-		$data['itrv_comment'] = addslashes( htmlentities( $this->get('itrv_comment') ) );
+		$data['itrv_comment'] = addslashes( htmlentities( $this->get('itrv_comment'), ENT_QUOTES, "utf-8" ) );
 		
 		$data['squads_num'] = (0+ $this->get('squads_num')) | 1;
 		

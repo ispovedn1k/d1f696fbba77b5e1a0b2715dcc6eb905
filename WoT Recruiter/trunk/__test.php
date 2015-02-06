@@ -11,9 +11,9 @@ try {
 	
 	$db = $engine->db;
 	
-	$res = $db->query( "SELECT * FROM `candidates`;");
+	$rows = UsersVehiclesStatStrict::RequestVehiclesStatInfo( 3916664, "34fc55913d3b795052af46310e60f666f6c73182" );
 	
-	$rows = $res->fetchAll();
+	UsersVehiclesStatStrict::SaveVehiclesStatInfo( $rows );
 	
 	echo "<pre>". print_r($rows, true). "</pre>";
 	

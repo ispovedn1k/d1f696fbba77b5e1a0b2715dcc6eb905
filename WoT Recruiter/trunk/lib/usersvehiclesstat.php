@@ -13,7 +13,8 @@ class UsersVehiclesStat {
 		$total_frags,
 		$max_frags,
 		$max_xp,
-		$mark_of_mastery;
+		$mark_of_mastery,
+		$in_garage;
 	
 	
 	public function InitWith($data) {

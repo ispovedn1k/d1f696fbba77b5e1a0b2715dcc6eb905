@@ -116,7 +116,7 @@
 				</label>
 				<br />
 				<label>обнаружено в среднем:
-					<input type="text" id="avg_spoted" name="avg_spoted" />
+					<input type="text" id="avg_spotted" name="avg_spotted" />
 				</label>
 				<br />
 				<label>выживаемость:

@@ -6,6 +6,15 @@ pre {
 	padding: 10px;
 }
 
+table {
+	width: 100%;
+}
+
+td {
+	vertical-align: top;
+	text-align: left;
+}
+
 .lightTank {
 	color: #008800;
 }
@@ -79,8 +88,12 @@ textarea.commentbox {
 }
 
 /******************************************************/
-#requiredVehicles{
+#requiredVehicles {
 	width: 100%;
+}
+
+#squad_calc {
+	width: 470px;
 }
 
 .squad-box {
@@ -109,19 +122,8 @@ textarea.commentbox {
 	background-color: #e8e8e8;
 }
 
-.candidate div.candidate-vehicles {
-	display: none;
-	background-color: #fffffff;
-	border: 1px: solid #eeeeee;
-	width: 468px;
-	min-height: 30px;
-	position: absolute;
-	z-index: 2;
-	margin-left: 468px;
-}
-
-.candidate:hover div.candidate-vehicles {
-	display: block;
+#candidateInfoStat {
+	width: 100%;
 }
 
 /******************************************************/

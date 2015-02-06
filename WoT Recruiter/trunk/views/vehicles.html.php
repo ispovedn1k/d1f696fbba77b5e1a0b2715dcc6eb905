@@ -23,13 +23,18 @@
 				<?php endif;?>
 			</td>
 			<td><span class="vehicle {{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.name_i18n}}</span></td>
-			<td>/ {{~item~.num_required}}</td>
-			<td>/ {{~item~.battles}}</td>
-			<td>/ {{~item~.winrate}}</td>
-			<td>/ {{~item~.avg_damage}}</td>
-			<td>/ {{~item~.avg_hits}}</td>
-			<td>/ {{~item~.avg_spoted}}</td>
-			<td>/ {{~item~.avg_surv}}</td>
+			<?php /* @warning:
+				Мне не нравится, что JS-переменная candidatesStat определена в другом файле.
+				*/
+				$user_id = Engine::getInstance()->user->id;
+			?>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.in_garage}}  / {{~item~.num_required}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.battles}} / {{~item~.battles}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.winrate}} / {{~item~.winrate}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_damage}} / {{~item~.avg_damage}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.hits_percents}} / {{~item~.avg_hits}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_spotted}} / {{~item~.avg_spotted}}</td>
+			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_surv}} / {{~item~.avg_surv}}</td>
 		</tr>
 	</tbody>
 </table>
@@ -37,7 +42,3 @@
 <input type="submit" name="join" value="Записаться" />
 <?php endif;?>
 </form>
-
-<script type="text/javascript">
-	$('#requiredVehicles tbody').Container(<?php echo json_encode( $data->a_vehicles );?>);
-</script>

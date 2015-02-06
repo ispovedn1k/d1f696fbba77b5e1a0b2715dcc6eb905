@@ -18,6 +18,7 @@ try {
 			`loginHash` VARCHAR(32) NOT NULL,
 			`lastIp` VARCHAR(16),
 			`lastUpdated` TEXT,
+			`lastForceUpdated` TEXT,
 			`access_token` VARCHAR(42),
 			`expires` INTEGER(10)
 		);";
@@ -94,6 +95,7 @@ try {
 			`max_frags`		INTEGER(10),
 			`max_xp`		INTEGER(10),
 			`mark_of_mastery`	INTEGER(1),
+			`in_garage`		BOOLEAN,
 
 			`spotted`		INTEGER(10),
 			`hits`			INTEGER(10),

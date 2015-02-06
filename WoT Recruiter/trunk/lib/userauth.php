@@ -16,6 +16,8 @@ class UserAuth {
 	
 	public $lastUpdated;
 	
+	public $lastForceUpdated;
+	
 	public $access_token;
 	
 	public $expires;
@@ -84,6 +86,7 @@ class UserAuth {
 		$this->loginHash = $row['loginHash'];
 		$this->lastIp = $row['lastIp'];
 		$this->lastUpdated = $row['lastUpdated'];
+		$this->lastForceUpdated = $row['lastForceUpdated'];
 		$this->access_token = $row['access_token'];
 		$this->expires = $row['expires'];
 		
@@ -114,7 +117,8 @@ class UserAuth {
 			`loginHash` = '" . $this->loginHash . "',
 			`lastLogin` = ". $this->lastLogin . ",
 			`access_token` = '". addslashes( $this->access_token ) ."',
-			`expires` = ". (0 + $this->expires) .";";
+			`expires` = ". (0 + $this->expires) .
+			" WHERE `id` = ". $this->id . ";";
 		
 		return $db->query( $sqlUpdate );
 	}
@@ -189,11 +193,45 @@ class UserAuth {
 	}
 	
 	
-	public function isValid() {
+	public function updatePlayerStat( $force = false ) {
+			$enforce = '';
+			$time = time();
+			
+			// запрещаем обновление чаще чем раз в сутки
+			if (( $time - $this->lastForceUpdated )< ( 60 * 60 * 24 ) ) {
+				return false;
+			}
+			
+			$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $this->id, $this->access_token );
+			UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
+			$this->lastUpdated = $time;
+			
+			if ( $force ) {
+				$this->lastForceUpdated = $time;
+				$enforce = " `lastForceUpdated` = ". $this->lastForceUpdated . " ,";
+			}
+			
+			$db = Engine::getInstance()->db;
+			
+			$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+				{$enforce}
+				`lastUpdated` = ". $this->lastUpdated . "
+				
+				WHERE `id` = ". $this->id . ";";
 		
+			return $db->query( $sqlUpdate );
 	}
+	
 	
 	public function getStatus() {
 		return $this->_authStatus;
+	}
+	
+	
+	public function isStatUp2Date() {
+		if (time() - $this->lastUpdated > 2592000 ) {
+			return false;
+		}
+		return true;
 	}
 }

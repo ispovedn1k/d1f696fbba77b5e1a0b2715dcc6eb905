@@ -21,7 +21,12 @@ class ModelInterview extends UniqDBObjectModel {
 	
 	public $_all_vehicles;
 	
+	public $_statData;
 	
+	
+	/**
+	 * @param number $itrv_id
+	 */
 	public function __construct( $itrv_id = 0 ) {
 		parent::__construct( Engine::getInstance()->db->tables("interviews") );
 		
@@ -34,13 +39,9 @@ class ModelInterview extends UniqDBObjectModel {
 	}
 	
 	
-	public function execute() {
-		$this->getVehiclesList();
-		
-		parent::execute();
-	}
-	
-	
+	/**
+	 * @return NULL|multitype:
+	 */
 	public function getAllVehiclesList() {
 		$db = Engine::getInstance()->db;
 		
@@ -115,7 +116,6 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->itrv_id = $itrv_id;
 		if ( $this->loadObjectFromDB( 'itrv_id') ) {
 			$this->loadCandidates();
-			//$this->a_vehicles = $this->loadVehicles();
 		}
 		return false;
 	}
@@ -172,7 +172,6 @@ class ModelInterview extends UniqDBObjectModel {
 		
 		foreach ( $candidates as $row) {
 			$row->a_vehicles = unserialize( stripslashes( $row->a_vehicles ) );
-			//$row->a_vehicles = $this->loadVehicles( $a_vehicles );
 			$this->_candidates[ $row->user_id ] = $row;
 		}
 		return true;
@@ -253,5 +252,34 @@ class ModelInterview extends UniqDBObjectModel {
 		$engine = Engine::getInstance();
 		// разрешено владельцу и мне
 		return $engine->user->id === $this->owner || $engine->user->id === "3916664";
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public function getUsersStat( $battle_types = "all") {
+		// тут должна быть загрузка статистики из кэша
+		// .......
+		// где в процессе создается массив ($candidate_id => array of uncached vehicles)
+		
+		// оформим пока заглушку
+		$candidates = array();
+		foreach ( $this->_candidates as $candidate_id => $candidate ) {
+			$candidates[] = $candidate_id;
+		}
+		// не забыть добавить себя
+		if ( ! $this->isMember() ) {
+			$candidates[] = Engine::getInstance()->user->id;
+		}
+		
+		$vehicles = array();
+		foreach ( $this->a_vehicles as $tank_id => $vehicle ) {
+			$vehicles[] = $tank_id;
+		}
+		// конец заглушки
+		
+		// бьем по площадям
+		$this->_statData = UsersVehiclesStatStrict::loadVehiclesStatInfo( $candidates, $vehicles, "all" );
 	}
 } 
