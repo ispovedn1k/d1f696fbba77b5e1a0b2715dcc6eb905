@@ -15,6 +15,13 @@ class ModelAuth extends Model {
 	
 	
 	public static function WGAuth2_GenerateRelink() {
+		// сначала попытаемся взять из кэша. Экономим половину запросов.
+		// @todo: На сколько хватит сохраненной ссылки? Как долго оно будет работать? Как часто ее надо обновлять заново?
+		$location = Engine::getInstance()->getOption("authRelink");
+		if ( null !== $location ) {
+			return $location;
+		}
+		
 		$context = stream_context_create(
 				array('http' =>
 						array(
@@ -33,6 +40,8 @@ class ModelAuth extends Model {
 		);
 		$data = json_decode(@file_get_contents('https://api.worldoftanks.ru/wot/auth/login/', false, $context),true);
 		if ("ok" === $data['status']){
+			// сохраним себе ссылку в кэш
+			Engine::getInstance()->setOption("authRelink", $data['data']['location']);
 			return $data['data']['location'];
 		}
 		else{
@@ -77,6 +86,29 @@ class ModelAuth extends Model {
 		}else{
 			return "failed to confirm access";
 		}
+	}
+	
+	
+	public function logout() {
+		$access_token = Engine::getInstance()->user->access_token;
+		
+		$context = stream_context_create(
+				array('http' =>
+					array(
+						'method'	=> 'POST',
+						'header'	=> 'Content-type: application/x-www-form-urlencoded',
+						'content' => http_build_query(
+							array(
+								'access_token' => $access_token,
+								'application_id' => Secrets::WG_ID
+							)
+						)
+					)
+				)
+		);
+		@file_get_contents("https://api.worldoftanks.ru/wot/auth/logout/", false, $context);
+		
+		Engine::getInstance()->user->clearAuth();
 	}
 	
 	
@@ -143,5 +175,5 @@ class ModelAuth extends Model {
 			throw new Exception("Failed to get userID from WG response. Inline string: ". $identity);
 		
 		return $matches[1];
-	}
+	}	
 }

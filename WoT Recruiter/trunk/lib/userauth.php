@@ -79,6 +79,16 @@ class UserAuth {
 		
 		$row = $data[0];
 		
+		if ($row['blocked']) {
+			$this->_authStatus = self::FAIL_ACC_BLOCK;
+			return self::FAIL_ACC_BLOCK;
+		}
+		
+		if ($row['loginHash'] !== $this->calcLoginHash()) {
+			$this->_authStatus = self::FAIL_BAD_HASH;
+			return self::FAIL_BAD_HASH;
+		}
+		
 		$this->id = $row['id'];
 		$this->personName = $row['personName'];
 		$this->lastLogin = $row['lastLogin'];
@@ -89,17 +99,6 @@ class UserAuth {
 		$this->lastForceUpdated = $row['lastForceUpdated'];
 		$this->access_token = $row['access_token'];
 		$this->expires = $row['expires'];
-		
-		if ($this->blocked) {
-			$this->_authStatus = self::FAIL_ACC_BLOCK;
-			return self::FAIL_ACC_BLOCK;
-		}
-		
-		if ($this->loginHash !== $this->calcLoginHash()) {
-			$this->_authStatus = self::FAIL_BAD_HASH;
-			return self::FAIL_BAD_HASH;
-		}
-		
 		$this->_authStatus = self::AUTH_SUCCESS;
 		return self::AUTH_SUCCESS;
 	}
@@ -294,5 +293,25 @@ class UserAuth {
 				WHERE `id` = {$user_id};";
 		
 		return $db->query( $sqlUpdate );
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public function clearAuth() {
+		setcookie("wgid", '');
+	}
+	
+	
+	/**
+	 * @return boolean
+	 */
+	public function isBlessed() {
+		if ( in_array($this->id, Secrets::$blessed) ) {
+			return true;
+		}
+	
+		return false;
 	}
 }

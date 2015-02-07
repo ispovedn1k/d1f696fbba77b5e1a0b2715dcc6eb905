@@ -3,28 +3,29 @@
 
 class ControllerAuth extends Controller {
 	
-	public function execute() {
-		$this->WGAuth2();
+	
+	/**
+	 * 
+	 */
+	public function logout() {
+		if ( UserAuth::AUTH_SUCCESS === Engine::getInstance()->user->getStatus() ) {
+			$model = new ModelAuth();
+			$model->logout();
+			Route::Relocate("index.php");
+		}
 	}
 	
 	
-	private function WGAuth() {
-		$res = null;
-		if ( UserAuth::AUTH_SUCCESS !== Engine::getInstance()->user->getStatus() ) {
-			$model = new ModelAuth();
-			$res = $model->execute();
-				
-			if (UserAuth::AUTH_SUCCESS === $res ) {
-				Route::Relocate( "index.php" );
-				return;
-			}
+	/**
+	 * (non-PHPdoc)
+	 * @see Controller::defaultAction()
+	 */
+	public function defaultAction() {
+		if ( UserAuth::AUTH_SUCCESS === Engine::getInstance()->user->getStatus() ) {
+			Route::Relocate( "index.php" );
+			return;
 		}
 		
-		$this->view->display(View::CONT_DEFAULT, $res);
-	}
-	
-	
-	private function WGAuth2() {
 		$error = false;
 		if ( empty( $_GET['status'] ) ) {
 			//генерируем ссылку и перенаправяем пользователя
@@ -88,5 +89,24 @@ class ControllerAuth extends Controller {
 		
 		// и как мы только докатились до этой жизни...
 		$this->view->display(View::ERROR_PAGE, $error);
+	}
+	
+	
+	/**
+	 * Неиспользуемый метод
+	 */
+	private function WGAuth() {
+		$res = null;
+		if ( UserAuth::AUTH_SUCCESS !== Engine::getInstance()->user->getStatus() ) {
+			$model = new ModelAuth();
+			$res = $model->execute();
+	
+			if (UserAuth::AUTH_SUCCESS === $res ) {
+				Route::Relocate( "index.php" );
+				return;
+			}
+		}
+	
+		$this->view->display(View::CONT_DEFAULT, $res);
 	}
 }

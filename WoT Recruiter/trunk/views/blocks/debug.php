@@ -23,4 +23,9 @@
 	<div class="spoiler-head"><h4>Cookies</h4></div>
 	<div class="spoiler-body"><pre><?php print_r($_COOKIE);?></pre></div>
 </div>
+
+<div class="spoiler">
+	<div class="spoiler-head"><h4>$_SERVER</h4></div>
+	<div class="spoiler-body"><pre><?php print_r($_SERVER);?></pre></div>
+</div>
 <?php endif;?>

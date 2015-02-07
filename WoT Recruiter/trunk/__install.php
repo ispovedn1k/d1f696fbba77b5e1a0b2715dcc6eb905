@@ -131,6 +131,15 @@ try {
 		throw new ErrorException( print_r( $db->errorInfo()) );
 	}
 	
+	$sql = "CREATE TABLE IF NOT EXISTS `". $db->tables("options") ."` (
+			`optName`	VARCHAR(64) NOT NULL,
+			`value`		TEXT
+		);";
+	$sql .= "CREATE UNIQUE INDEX IF NOT EXISTS `ui_optname` ON `". $db->tables("options"). "` (`optName`);";
+	if (false === $db->query( $sql )) {
+		throw new ErrorException( print_r( $db->errorInfo()) );
+	}
+	
 	$model = new ModelSyncVehicles();
 	$model->execute();
 	

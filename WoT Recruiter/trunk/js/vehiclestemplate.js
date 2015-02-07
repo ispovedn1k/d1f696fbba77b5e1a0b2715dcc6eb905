@@ -51,65 +51,6 @@
 			}
 
 		});
-		
-		
-		function makeNode( template, key, collection ) {
-			var rx = /{{\s*([~\w\.]+)\s*}}/gm;
-			template = template.replace(rx, function(str, varname, offset, a){			
-				var varpath = varname.split('.');
-				var fixed = getData(varpath, key, collection);
-				if (undefined === fixed) {
-					fixed = '--';
-				}
-				return fixed;
-			});
-			return template;
-		}
-		
-		
-		function getData(path, key, collection, level) {
-			if ( undefined === path ) {
-				return undefined;
-			}
-			
-			if ( undefined === level ) {
-				level = 0;
-			}
-			
-			if (path.length === level) {
-				return collection;
-			}
-			
-			if (0 === level) {
-				switch(path[0]) {
-					case '~key~':
-						collection = key;
-						break;
-					case '~item~':
-						if (undefined === collection ) return undefined;
-						collection =  collection[ key ];
-						break;
-					case '~collection~':
-						break;
-					default:
-						collection = window[ path[0] ];
-				}
-			} else {
-				if ( undefined === collection ) {
-					return undefined;
-				}
-				
-				switch ( path[ level ] ) {
-					case '~key~':
-						collection = collection[ key ];
-						break
-					default:
-						collection = collection[ path[ level ] ];
-				}
-			}
-			
-			return getData(path, key, collection, ++level);
-		}
 	}
 	
 	
@@ -142,17 +83,21 @@
 	
 	
 	/**
-	 * Заполняет шаблонные поля про танки ноды данными из танкопедии
+	 * Заполняет шаблонные поля данными из параметра
 	 */
-	$.fn.Tankany = function() {
+	$.fn.Tankany = function( data ) {
 		$(this).each(function(index){
 			var $this = $(this);
-			var html_template = $this.outerHTML;
-			var tank_id = $this.data('tank_id');
+			var template = $this.data('ctemplate');
 			
-			if ( tank_id ) {
-				$this.outerHTML = applyVehicle( tank_id, html_temlplate );
+			if (! template ) {
+				// если шаблон не определен, определяем его и сохраняем
+				template = $this.html();
+				$this.data('ctemplate', template);
 			}
+			
+			var html = makeNode(template, '', data);
+			$this.html(html);
 		});
 		return $(this);
 	}
@@ -167,5 +112,65 @@
 			return tankopedia.vehicles[ tank_id ] [ p ];
 		});
 		return template;
+	}
+	
+
+	
+	function makeNode( template, key, collection ) {
+		var rx = /{{\s*([~\w\.]+)\s*}}/gm;
+		template = template.replace(rx, function(str, varname, offset, a){			
+			var varpath = varname.split('.');
+			var fixed = getData(varpath, key, collection);
+			if (undefined === fixed) {
+				fixed = '--';
+			}
+			return fixed;
+		});
+		return template;
+	}
+	
+	
+	function getData(path, key, collection, level) {
+		if ( undefined === path ) {
+			return undefined;
+		}
+		
+		if ( undefined === level ) {
+			level = 0;
+		}
+		
+		if (path.length === level) {
+			return collection;
+		}
+		
+		if (0 === level) {
+			switch(path[0]) {
+				case '~key~':
+					collection = key;
+					break;
+				case '~item~':
+					if (undefined === collection ) return undefined;
+					collection =  collection[ key ];
+					break;
+				case '~collection~':
+					break;
+				default:
+					collection = window[ path[0] ];
+			}
+		} else {
+			if ( undefined === collection ) {
+				return undefined;
+			}
+			
+			switch ( path[ level ] ) {
+				case '~key~':
+					collection = collection[ key ];
+					break
+				default:
+					collection = collection[ path[ level ] ];
+			}
+		}
+		
+		return getData(path, key, collection, ++level);
 	}
 })();

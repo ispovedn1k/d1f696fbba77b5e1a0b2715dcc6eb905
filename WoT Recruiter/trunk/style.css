@@ -174,3 +174,32 @@ div.copyright {
 	vertical-align: top;
 	border: 1px solid #dddddd;
 }
+
+
+/*****************************************************/
+.queue-interface-box {
+	width: 200px;
+	height: 210px;
+	position: absolute;
+	background-color: #F8F8F8;
+	border: 1px solid #888888;
+	z-index: 2;
+	right: 10px;
+	padding: 10px;
+}
+
+.queue-interface-box .queue-st-running {
+	color: green;
+}
+
+.queue-interface-box .queue-st-dead {
+	color: red;
+}
+
+.queue-interface-box table.queue-stat-table-fail {
+	border: 1px solid red;
+}
+
+.queue-interface-box table tbody tr th {
+	width: 88px;
+}

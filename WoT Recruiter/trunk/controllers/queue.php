@@ -7,7 +7,7 @@ class ControllerQueue extends Controller {
 	 * 
 	 */
 	public function start() {
-		if (! self::hasAccess() ) {
+		if (! Engine::getInstance()->user->isBlessed() ) {
 			$ret = array(
 				'status' => "fail",
 				'msg' => "access denied"
@@ -16,7 +16,7 @@ class ControllerQueue extends Controller {
 		else { 
 			if ( ModelQueue::Start() ) {
 				// запускаем скрипт через сокет
-				$http = fsockopen( DOMAIN_NAME, 80 );
+				$http = fsockopen( "localhost", 80 );
 				if (false === $http) {
 					$ret = array('status' => "fail", 'msg' => "failed to create socket");
 				}
@@ -42,7 +42,7 @@ class ControllerQueue extends Controller {
 	 * 
 	 */
 	public function stop() {
-		if (! self::hasAccess() ) {
+		if (! Engine::getInstance()->user->isBlessed() ) {
 			$ret = array(
 				'status' => "fail",
 				'msg' => "access denied"
@@ -65,7 +65,7 @@ class ControllerQueue extends Controller {
 	 * 
 	 */
 	public function terminate() {
-		if (! self::hasAccess() ) {
+		if (! Engine::getInstance()->user->isBlessed() ) {
 			$ret = array(
 				'status' => "fail",
 				'msg' => "access denied"
@@ -88,7 +88,7 @@ class ControllerQueue extends Controller {
 	 * 
 	 */
 	public function status() {
-		if (! self::hasAccess() ) {
+		if (! Engine::getInstance()->user->isBlessed() ) {
 			$ret = array(
 					'status' => "fail",
 					'msg' => "access denied"
@@ -113,6 +113,7 @@ class ControllerQueue extends Controller {
 	 * @see Controller::defaultAction()
 	 */
 	public function defaultAction() {
+		@file_put_contents("queue_log.txt", date("H:i:s "). $_SERVER['REMOTE_ADDR'] ."\r\n");
 		// сбрасываем все неразрешенные подключения
 		if ( QUEUE_ALLOWED_IP !== $_SERVER['REMOTE_ADDR'] ) {
 			return;
@@ -122,23 +123,11 @@ class ControllerQueue extends Controller {
 		$model->getTopTask();
 		if ( $model->executeTask() ) {
 			// перезапускаем скрипт через сокет
-			$http = fsockopen( DOMAIN_NAME, 80 );
+			$http = fsockopen( "localhost", 80 );
 			fputs($http, "GET ". QUEUE_SCRIPT_URI. " HTTP/1.0\r\n");
 			fputs($http, "Host: ". DOMAIN_NAME ."\r\n");
 			fputs($http, "\r\n");
 			fclose($http);
 		}
-	}
-	
-	
-	/**
-	 * @return boolean
-	 */
-	private static function hasAccess() {
-		if ( in_array(Engine::getInstance()->user->id, Secrets::$blessed) ) {
-			return true;
-		}
-	
-		return false;
 	}
 }

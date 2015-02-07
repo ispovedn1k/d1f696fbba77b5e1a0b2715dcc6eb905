@@ -18,6 +18,7 @@ class ModelQueue extends Model {
 		// используем последнюю запись об остановке
 		$sql = "UPDATE `". $db->tables("queue") ."` SET
 				`callName` = 'start',
+				`params` = 'running',
 				`execmicrotime` = {$mctime},
 				`done` = 1
 				WHERE `callName` = 'prestart';";
@@ -27,9 +28,9 @@ class ModelQueue extends Model {
 		if ( $res->rowCount() == 0 ) {
 			// Записей об остановке не было, вставим запись старта
 			$sql = "INSERT INTO `". $db->tables("queue") ."`
-					(`id`, `callName`, `execmicrotime`, `done`)
+					(`id`, `callName`, `params`, `execmicrotime`, `done`)
 					VALUES
-					(1, 'start', {$mctime}, 1);";
+					(1, 'start', 'running', {$mctime}, 1);";
 			return $db->query( $sql );
 		}
 		
@@ -93,56 +94,60 @@ class ModelQueue extends Model {
 				'done_total' => 0,
 				'to_do' => 0,
 				'nearest_id' => 0,
-				'endpoint_id' => 0
+				'endpoint_id' => 0,
+				'status' => 'dead',
 		);
 		
-		$sql = "SELECT * FROM `". $db->tables("queue") ."` WHERE `callName` = 'start' ORDER BY `id` DESC LIMIT 0, 1;";
+		$sql = "SELECT * FROM `". $db->tables("queue") ."` WHERE `callName` = 'start' AND `params` = 'running' ORDER BY `id` DESC LIMIT 0, 1;";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
 			$row = $res->fetch(PDO::FETCH_ASSOC);
-			$ret['start_id'] = $row['id'];
-			$ret['start_time'] = $row['execmincrotime'];
+			if ( $row ) {
+				$ret['start_id'] = $row['id'];
+				$ret['start_time'] = date("Y-m-d H:i:s", $row['execmicrotime'] );
+				$ret['status'] = 'running';
+			}
 		}
 		
 		$sql = "SELECT COUNT(`id`) FROM `". $db->tables("queue") ."` WHERE `done` = 1 AND `id` > " . $ret['start_id'] .";";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
-			$row = $res->fetch();
-			$ret['done_now'] = $row[0];
+			if ( $row = $res->fetch() )
+				$ret['done_now'] = $row[0];
 		}
 		
 		$sql = "SELECT COUNT(`id`) FROM `". $db->tables("queue") ."` WHERE `done` = 1;";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
-			$row = $res->fetch();
-			$ret['done_total'] = $row[0];
+			if ( $row = $res->fetch() )
+				$ret['done_total'] = $row[0];
 		}
 		
 		$sql = "SELECT COUNT(`id`) FROM `". $db->tables("queue") ."` WHERE `done` = 0;";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
-			$row = $res->fetch();
-			$ret['to_do'] = $row[0];
+			if ( $row = $res->fetch() )
+				$ret['to_do'] = $row[0];
 		}
 		
 		$sql = "SELECT * FROM `". $db->tables("queue") ."` WHERE `done` = 0 ORDER BY `id` ASC LIMIT 0, 1;";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
-			$row = $res->fetch();
-			$ret['nearest_id'] = $row[0];
+			if ( $row = $res->fetch() )
+				$ret['nearest_id'] = $row[0];
 		}
 		
 		$sql = "SELECT * FROM `". $db->tables("queue") ."` WHERE `done` = 0 ORDER BY `id` DESC LIMIT 0, 1;";
 		$res = $db->query( $sql );
 		
 		if ( $res ) {
-			$row = $res->fetch();
-			$ret['endpoint_id'] = $row[0];
+			if ( $row = $res->fetch() )
+				$ret['endpoint_id'] = $row[0];
 		}
 		
 		return $ret;
@@ -244,14 +249,7 @@ class ModelQueue extends Model {
 		
 		switch( $this->callName ) {
 			case 'stop':
-				// если это терминатор, убираем его
-				if ( $this->id == 0 ) {
-					$this->deleteTask();
-				}
-				else {
-					$this->done = 1;
-					$this->updateTask();
-				}
+				$this->shutDown();
 				return false;
 
 			case 'updateUserStat':
@@ -283,5 +281,25 @@ class ModelQueue extends Model {
 		$this->updateTask();
 		// успешное завершение, надо продолжать работу.
 		return true;
+	}
+	
+	
+	/**
+	 * @return PDOStatement
+	 */
+	protected function shutDown() {
+		// если это терминатор, убираем его
+		if ( $this->id == 0 ) {
+			$this->deleteTask();
+		}
+		else {
+			$this->done = 1;
+			$this->updateTask();
+		}
+		
+		$db = Engine::getInstance()->db;
+		
+		$sql = "UPDATE `". $db->tables("queue") ."` SET `params` = 'dead' WHERE `params` = 'running'";
+		return $db->query( $sql );
 	}
 }
