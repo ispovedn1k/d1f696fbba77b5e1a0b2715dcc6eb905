@@ -6,23 +6,40 @@ class ControllerUserStat extends Controller {
 	
 	public function defaultAction() {
 		$user = Engine::getInstance()->user;
+		$resp = '';
+		
 		if ( UserAuth::AUTH_SUCCESS === $user->getStatus() ) {
-			if ( $user->isStatUp2Date() ) {
-				$user->updatePlayerStat();
+			if (! $user->isStatUp2Date() ) {
+				if ( $user->updatePlayerStat() ) {
+					$resp = array('status' => "ok");
+				}
+				else {
+					$resp = array('status' => "fail", 'msg' => "something got wrong");
+				}
+			}
+			else {
+				$resp = array('status' => "fail", 'msg' => "stat is up2date");
 			}
 		}
 		
-		$this->view->display('default.json', array('status' => "ok"), "default_page.json");
+		$this->view->display('default.json', $resp, "default_page.json");
 	}
 	
 	
 	public function forceUpdate() {
 		$user = Engine::getInstance()->user;
+		$resp = '';
+		
 		if ( UserAuth::AUTH_SUCCESS === $user->getStatus() ) {
-			$user->updatePlayerStat( true );
+			if ( $user->updatePlayerStat(true) ) {
+				$resp = array('status' => "ok");
+			}
+			else {
+				$resp = array('status' => "fail", 'msg' => "something got wrong");
+			}
 		}
 		
-		$this->view->display('default.json', array('status' => "ok"), "default_page.json");
+		$this->view->display('default.json', $resp, "default_page.json");
 	}
 }
 

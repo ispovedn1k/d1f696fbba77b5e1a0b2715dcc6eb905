@@ -16,16 +16,21 @@ class ControllerQueue extends Controller {
 		else { 
 			if ( ModelQueue::Start() ) {
 				// запускаем скрипт через сокет
-				$html = fsockopen( DOMAIN_NAME, 80 );
-				fputs($http, QUEUE_SCRIPT_URI. " HTTP/1.0\r\n");
-				fputs($http, "Host: ". DOMAIN_NAME ."\r\n");
-				fputs($http, "\r\n");
-				fclose($http);
-				
-				$ret = array('status' => "ok");
+				$http = fsockopen( DOMAIN_NAME, 80 );
+				if (false === $http) {
+					$ret = array('status' => "fail", 'msg' => "failed to create socket");
+				}
+				else {
+					fputs($http, "GET ". QUEUE_SCRIPT_URI . " HTTP/1.0\r\n");
+					fputs($http, "Host: ". DOMAIN_NAME ."\r\n");
+					fputs($http, "\r\n");
+					fclose($http);
+					
+					$ret = array('status' => "ok");
+				}
 			}
 			else {
-				$ret = array('status' => "fail", 'msg' => "something got wrong");
+				$ret = array('status' => "fail", 'msg' => "something got wrong" . print_r( Engine::getInstance()->db->errorInfo(), true));
 			}
 		}
 		
@@ -48,7 +53,7 @@ class ControllerQueue extends Controller {
 				$ret = array('status' => "ok");
 			}
 			else {
-				$ret = array('status' => "fail", 'msg' => "something got wrong");
+				$ret = array('status' => "fail", 'msg' => "something got wrong". print_r( Engine::getInstance()->db->errorInfo(), true));
 			}
 		}
 		
@@ -109,17 +114,16 @@ class ControllerQueue extends Controller {
 	 */
 	public function defaultAction() {
 		// сбрасываем все неразрешенные подключения
-		if ( QUEUE_ALLOWED_IP !== $_SERVER['REMOTE_PORT'] ) {
+		if ( QUEUE_ALLOWED_IP !== $_SERVER['REMOTE_ADDR'] ) {
 			return;
 		}
 		
 		$model = new ModelQueue();
 		$model->getTopTask();
-		
 		if ( $model->executeTask() ) {
 			// перезапускаем скрипт через сокет
-			$html = fsockopen( DOMAIN_NAME, 80 );
-			fputs($http, QUEUE_SCRIPT_URI. " HTTP/1.0\r\n");
+			$http = fsockopen( DOMAIN_NAME, 80 );
+			fputs($http, "GET ". QUEUE_SCRIPT_URI. " HTTP/1.0\r\n");
 			fputs($http, "Host: ". DOMAIN_NAME ."\r\n");
 			fputs($http, "\r\n");
 			fclose($http);

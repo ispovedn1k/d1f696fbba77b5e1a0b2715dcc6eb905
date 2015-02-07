@@ -4,7 +4,8 @@ require_once 'secrets.php';
 
 define('DOMAIN_NAME', "ispovedn1k.com");
 define('ROOT_URI', "http://ispovedn1k.com/wg/");
-define('QUEUE_SCRIPT_URI', "http://ispovedn1k.com/wg/2sdfhs3gsasd3.php?cont=queue");
+// лучше использовать случайный хэш, и переименовать backgroun_queue.php, чтобы не знали, как достучаться
+define('QUEUE_SCRIPT_URI', "http://ispovedn1k.com/wg/background_queue.php?cont=queue");
 define('QUEUE_ALLOWED_IP', "77.232.134.61");
 
 if (! defined('__DIR__')) {

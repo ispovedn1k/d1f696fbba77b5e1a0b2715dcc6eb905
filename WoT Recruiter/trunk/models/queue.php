@@ -44,10 +44,13 @@ class ModelQueue extends Model {
 	 */
 	public static function Stop() {		
 		$db = Engine::getInstance()->db;
-		$mctime = microtime(true);
+		$mctime = time();
 		
 		// записываем метку для остановки и подготавливаем точку для старта
-		$sql = "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`) VALUES ('start', '{$mctime}'), ('prestart', 0);";
+		$sql = "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`, `done`) VALUES ('stop', {$mctime}, 0);";
+		// сделаем так, чтобы sqlite древних версий не ругался
+		$db->query( $sql );
+		$sql = "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`, `done`) VALUES ('prestart', 0, 0);";
 		
 		return $db->query( $sql );
 	}
@@ -64,8 +67,9 @@ class ModelQueue extends Model {
 		$db = Engine::getInstance()->db;
 		$mctime = microtime(true);
 		// записываем метку для остановки и подготавливаем точку для старта
-		$sql = "INSERT INTO `". $db->tables("queue") ."` (`id`, `callName`, `execmicrotime`) VALUES (0, 'stop', '{$mctime}');";
-		$sql .= "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`) VALUES ('prestart', 0);";
+		$sql = "INSERT INTO `". $db->tables("queue") ."` (`id`, `callName`, `execmicrotime`, `done`) VALUES (0, 'stop', '{$mctime}', 0);";
+		$db->query( $sql );
+		$sql = "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`, `done`) VALUES ('prestart', 0, 0);";
 		
 		return $db->query( $sql );
 	}
@@ -199,9 +203,10 @@ class ModelQueue extends Model {
 		$db = Engine::getInstance()->db;
 		
 		$sql = "UPDATE `". $db->tables("queue") ."` SET
-				`shots` = ". $this->shots ."
-				`done` = ". $this->done ."
-				`execmicrotime` = ". $this->execmicrotime .";";
+				`shots` = ". $this->shots .",
+				`done` = ". $this->done .",
+				`execmicrotime` = ". $this->execmicrotime ."
+				WHERE `id` = ". $this->id .";";
 		
 		return $db->query( $sql );
 	}
@@ -223,17 +228,19 @@ class ModelQueue extends Model {
 	 * 
 	 */
 	public function executeTask() {
+		global $start_time, $time;
 		// выполнение разрешено только для определенного скрипта
 		if (! defined('BACKGROUND_QUEUE') ) {
 			return false;
 		}
 		// если нет задачи
-		if (! $this->callName ) {
+		if ( '' == $this->callName ) {
 			sleep( 5 );
 			return true;
 		}
 		
 		$this->shots += 1;
+		$this->execmicrotime = time();
 		
 		switch( $this->callName ) {
 			case 'stop':
@@ -248,9 +255,9 @@ class ModelQueue extends Model {
 				return false;
 
 			case 'updateUserStat':
-				if ( $this->updateUserStat() ) {
+				if ( UserAuth::updateUserStat( $this->params['user_id'], $this->params['access_token'] ) ) {
 					$this->done = 1;
-					$this->execmicrotime = microtime(true) - $start_time;
+					$this->execmicrotime = time() - $time;
 				}
 				else {
 					// защитимся от зафлуживания
@@ -276,28 +283,5 @@ class ModelQueue extends Model {
 		$this->updateTask();
 		// успешное завершение, надо продолжать работу.
 		return true;
-	}
-		
-	
-	/**
-	 * @return PDOStatement
-	 */
-	protected function updateUserStat() {
-		$time = time();
-		
-		$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo(
-				$this->params['user_id'],
-				$this->params['access_token']
-		);
-		UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
-		
-		$db = Engine::getInstance()->db;
-			
-		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
-				`lastUpdated` = {$time}
-				
-				WHERE `id` = ". $this->params['user_id'] . ";";
-		
-		return $db->query( $sqlUpdate );
 	}
 }

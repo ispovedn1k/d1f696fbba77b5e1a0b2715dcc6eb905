@@ -193,8 +193,18 @@ class UserAuth {
 	}
 	
 	
+	/**
+	 * @param boolean $force
+	 */
 	public function updatePlayerStat( $force = false ) {
-		ModelQueue::addTask(
+		$time = time();
+		// если добавлялся в очередь менее чем сутки назад
+		if (( $time - $this->lastForceUpdated ) < ( 60 * 60 * 24 ) ) {
+			// не будем ничего делать
+			return false;
+		}
+		
+		$res = ModelQueue::addTask(
 			"updateUserStat",
 			array(
 				'user_id' => $this->id,
@@ -202,15 +212,21 @@ class UserAuth {
 			)
 		);
 		
-		if ( $force ) {
-			$this->lastForceUpdated = time();
-			$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
-				`lastForceUpdated` = ". $this->lastForceUpdated . " ,
-			
+		// не удалось добавить в очередь?
+		if (! $res) {
+			// выходим
+			return false;
+		}
+		
+		$db = Engine::getInstance()->db;
+		
+		$this->lastForceUpdated = $time;
+		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+				`lastForceUpdated` = ". $this->lastForceUpdated . "
 				WHERE `id` = ". $this->id . ";";
 			
-			return $db->query( $sqlUpdate );
-		}
+		return $db->query( $sqlUpdate );
+		
 		/*	
 		$enforce = '';
 		$time = time();
@@ -242,15 +258,41 @@ class UserAuth {
 	}
 	
 	
+	/**
+	 * @return string
+	 */
 	public function getStatus() {
 		return $this->_authStatus;
 	}
 	
 	
+	/**
+	 * @return boolean
+	 */
 	public function isStatUp2Date() {
-		if (time() - $this->lastUpdated > 2592000 ) {
+		if ( (time() - $this->lastUpdated) > 2592000 ) {
 			return false;
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * @return PDOStatement
+	 */
+	public static function updateUserStat( $user_id, $access_token = '' ) {
+		$time = time();
+		
+		$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $user_id,	$access_token );
+		UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
+		
+		$db = Engine::getInstance()->db;
+			
+		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+				`lastUpdated` = {$time}
+				
+				WHERE `id` = {$user_id};";
+		
+		return $db->query( $sqlUpdate );
 	}
 }

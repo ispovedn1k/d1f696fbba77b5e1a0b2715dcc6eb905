@@ -131,8 +131,8 @@ try {
 		throw new ErrorException( print_r( $db->errorInfo()) );
 	}
 	
-	// $model = new ModelSyncVehicles();
-	// $model->execute();
+	$model = new ModelSyncVehicles();
+	$model->execute();
 	
 	echo "DONE! Completed successfully!". PHP_EOL;
 }

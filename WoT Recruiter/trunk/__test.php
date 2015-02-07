@@ -14,11 +14,11 @@ try {
 	//$rows = UsersVehiclesStatStrict::RequestVehiclesStatInfo( 3916664, "34fc55913d3b795052af46310e60f666f6c73182" );
 	
 	//UsersVehiclesStatStrict::SaveVehiclesStatInfo( $rows );
-	$res = $db->query( "SELECT * FROM users WHERE id = 100;" );
+	$res = $db->query( "SELECT * FROM `queue`;" );
 	
-	$rows = $res->fetch();
+	$rows = $res->fetchAll(PDO::FETCH_ASSOC);
 	
-	echo "<pre>". var_dump($rows). "</pre>";
+	echo "<pre>". print_r($rows, true). "</pre>";
 	
 	echo "completed success";
 }
