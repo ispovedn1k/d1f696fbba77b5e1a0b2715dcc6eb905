@@ -100,6 +100,11 @@ class UserAuth {
 		$this->access_token = $row['access_token'];
 		$this->expires = $row['expires'];
 		$this->_authStatus = self::AUTH_SUCCESS;
+		
+		if (! $this->isStatUp2Date() ) {
+			$this->updatePlayerStat();
+		}
+		
 		return self::AUTH_SUCCESS;
 	}
 	

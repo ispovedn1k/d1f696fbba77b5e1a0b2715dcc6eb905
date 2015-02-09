@@ -17,6 +17,7 @@ define('VIEWS_DIR', BASE_DIR . "views/");
 define('CONTROLLERS_DIR', BASE_DIR . "controllers/");
 define('MODELS_DIR', BASE_DIR . "models/");
 define('LIB_DIR', BASE_DIR . "lib/");
+define('LOG_DIR', BASE_DIR . "logs/");
 
 define('TABLE_PREFIX', '');
 

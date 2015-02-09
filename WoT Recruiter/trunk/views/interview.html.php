@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 var moves = new Object();
-var candidatesStat = new CandidatesStat().Init(<?php echo json_encode($data->_statData);?>);
+var candidatesStat = new CandidatesStat(<?php echo json_encode($data->_statData);?>);
 
 var squads = new Squads(
 	<?php echo json_encode( $data->_candidates );?>,
@@ -26,12 +26,13 @@ $(function() {
 		},
 	});
 	$('.squad-box').disableSelection();
+	<? endif; ?>
+	
 	$('.candidate').click(function(){
 		var user_id = $(this).data('userid');
-		$('#candidateInfoStat tbody').Container( candidatesStat['sortedByUserID'][ user_id ]['all'] );
+		$('#candidateInfoStat tbody').Container( candidatesStat.getFilteredStat( user_id, squads.Candidates[user_id].a_vehicles ) );
 	});
 	$('#candidateInfoStat tbody').Container( {} );
-	<? endif; ?>
 	
 	// @warning! Костыль!
 	$('#squadsupdate').click(function() {
@@ -60,5 +61,10 @@ $(function() {
 if (! $data->isMember() ) {
 	include "vehicles.html.php";
 }
+/**
+ * показывать в статистике выбранного игрока не всю технику, а только ту, что он выбрал для участия.
+ * 
+ * заблокировать кнопку "записаться", если не выбран ни один танк
+ */
 ?>
 <?php include "candidates.html.php";?>

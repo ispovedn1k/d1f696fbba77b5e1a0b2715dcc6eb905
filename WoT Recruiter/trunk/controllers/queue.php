@@ -16,7 +16,7 @@ class ControllerQueue extends Controller {
 		else { 
 			if ( ModelQueue::Start() ) {
 				// запускаем скрипт через сокет
-				$http = fsockopen( "localhost", 80 );
+				$http = fsockopen( DOMAIN_NAME, 80 );
 				if (false === $http) {
 					$ret = array('status' => "fail", 'msg' => "failed to create socket");
 				}
@@ -123,7 +123,7 @@ class ControllerQueue extends Controller {
 		$model->getTopTask();
 		if ( $model->executeTask() ) {
 			// перезапускаем скрипт через сокет
-			$http = fsockopen( "localhost", 80 );
+			$http = fsockopen( DOMAIN_NAME, 80 );
 			fputs($http, "GET ". QUEUE_SCRIPT_URI. " HTTP/1.0\r\n");
 			fputs($http, "Host: ". DOMAIN_NAME ."\r\n");
 			fputs($http, "\r\n");

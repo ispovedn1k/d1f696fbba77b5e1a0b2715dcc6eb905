@@ -1,17 +1,17 @@
 var Squads = function( initCandidates, vehicles ) {
-	var Candidates = {};
 	var _root = this;
 	
 	// this.sortedBySquads = {};
 	
 	this.vehicles = {};
+	this.Candidates = {};
 	
 	
 	/**
 	 * constructor
 	 */
 	(function(){
-		Candidates = initCandidates;
+		_root.Candidates = initCandidates;
 		
 		_root.vehicles = vehicles;
 		
@@ -33,10 +33,10 @@ var Squads = function( initCandidates, vehicles ) {
 			ret[ tank_id ] = 0;
 		}
 		
-		for ( p in Candidates ) {
-			for (i in Candidates[ p ]['a_vehicles'] ) {
-				if ( Candidates[ p ]['status'] == squad_id ) {
-					ret[ Candidates[ p ]['a_vehicles'][i] ]++;
+		for ( p in _root.Candidates ) {
+			for (i in _root.Candidates[ p ]['a_vehicles'] ) {
+				if ( _root.Candidates[ p ]['status'] == squad_id ) {
+					ret[ _root.Candidates[ p ]['a_vehicles'][i] ]++;
 				}
 			}
 		}
@@ -49,7 +49,7 @@ var Squads = function( initCandidates, vehicles ) {
 	 * 
 	 */
 	this.moveUserToSquad = function( user_id, squad_id ) {
-		Candidates[ user_id ]['status'] = squad_id;
+		_root.Candidates[ user_id ]['status'] = squad_id;
 	};
 	
 	
@@ -59,12 +59,12 @@ var Squads = function( initCandidates, vehicles ) {
 	function sortBySquads() {
 		var sorted = new Object();
 		
-		for ( p in Candidates ) {
-			var status = Candidates[ p ]['status'];
+		for ( p in _root.Candidates ) {
+			var status = _root.Candidates[ p ]['status'];
 			if (undefined === sorted[ status ]) {
 				sorted[ status ] = new Array();
 			}
-			sorted[ status ].push( Candidates [ p ] );
+			sorted[ status ].push( _root.Candidates [ p ] );
 		}
 		
 		return sorted;

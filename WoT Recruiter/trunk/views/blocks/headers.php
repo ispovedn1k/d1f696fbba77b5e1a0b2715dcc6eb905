@@ -20,13 +20,6 @@
 			$('.spoiler').click(function(){
 				$(this).children('.spoiler-body').toggle(500);
 			});
-
-			$.get("<?php echo Route::LocalUrl("?cont=userstat");?>",
-				{},
-				function (data) {
-					// alert(data.status);
-				},
-				"json");
 		});
 
 		var tankopedia = new Tankopedia();

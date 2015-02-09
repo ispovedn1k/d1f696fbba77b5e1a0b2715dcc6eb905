@@ -1,5 +1,6 @@
 <h4>Список техники:</h4>
-<form action="<?php echo Route::LocalUrl("?cont=interview&action=join&itrv_id=". $data->itrv_id);?>" method="post">
+<div class="helper">Чтобы записаться, выберите технику, на которой будете участвовать.</div>
+<form action="<?php echo Route::LocalUrl("?cont=interview&action=join&itrv_id=". $data->itrv_id);?>" method="post" id="joinForm">
 <table id="requiredVehicles">
 	<caption>Ваши характиристики / требуемый минимум:</caption>
 	<thead>
@@ -39,6 +40,20 @@
 	</tbody>
 </table>
 <?php if (! $data->isMember() ) : ?>
-<input type="submit" name="join" value="Записаться" />
+<input type="submit" name="join" value="Записаться" disabled="disabled" />
 <?php endif;?>
 </form>
+
+<script type="text/javascript">
+	$(function(){
+		$('#requiredVehicles input[type=checkbox]').click(function(){
+			if (0 === $('#requiredVehicles input[type=checkbox]:checked').length ) {
+				$('#joinForm input[type=submit]').attr('disabled', true);
+			}
+			else {
+				$('#joinForm input[type=submit]').attr('disabled', false);
+			}
+		});
+	});
+</script>
+		

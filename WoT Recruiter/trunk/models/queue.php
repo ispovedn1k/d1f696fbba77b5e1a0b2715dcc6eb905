@@ -105,7 +105,7 @@ class ModelQueue extends Model {
 			$row = $res->fetch(PDO::FETCH_ASSOC);
 			if ( $row ) {
 				$ret['start_id'] = $row['id'];
-				$ret['start_time'] = date("Y-m-d H:i:s", $row['execmicrotime'] );
+				$ret['start_time'] = @date("Y-m-d H:i:s", $row['execmicrotime'] );
 				$ret['status'] = 'running';
 			}
 		}

@@ -14,7 +14,7 @@ try {
 			`id` INTEGER (10) NOT NULL,
 			`personName` VARCHAR(64) NOT NULL,
 			`lastLogin` TEXT NOT NULL,
-			`blocked` BOOLEAN(1),
+			`blocked` BOOLEAN,
 			`loginHash` VARCHAR(32) NOT NULL,
 			`lastIp` VARCHAR(16),
 			`lastUpdated` TEXT,

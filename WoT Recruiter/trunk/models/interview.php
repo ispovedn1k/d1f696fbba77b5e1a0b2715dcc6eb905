@@ -269,7 +269,7 @@ class ModelInterview extends UniqDBObjectModel {
 			$candidates[] = $candidate_id;
 		}
 		// не забыть добавить себя
-		if ( ! $this->isMember() ) {
+		if ( ( ! $this->isMember() ) && (UserAuth::AUTH_SUCCESS === Engine::getInstance()->user->getStatus()) ) {
 			$candidates[] = Engine::getInstance()->user->id;
 		}
 		

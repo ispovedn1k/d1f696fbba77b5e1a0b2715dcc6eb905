@@ -79,8 +79,8 @@ class Engine {
 		}
 		
 		$sql = "INSERT INTO `". $this->db->tables("options") ."` (`optName`, `value`) VALUES ('".
-				addslashes( serialize($value) ) ."', '".
-				addslashes( $optName ) ."' );";
+				addslashes( $optName ) ."', '".
+				addslashes( serialize($value) ) ."' );";
 		return $this->db->query( $sql );
 	}
 	

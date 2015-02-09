@@ -1,4 +1,4 @@
-var CandidatesStat = function() {
+var CandidatesStat = function( _data ) {
 	var _root = this;
 	
 	var data = {};
@@ -6,7 +6,10 @@ var CandidatesStat = function() {
 	this.sortedByUserID = {};
 	
 	
-	this.Init = function( _data ) {
+	/**
+	 * constructor
+	 */
+	(function() {
 		data = _data;
 		
 		// необходимо провести кое-какие расчеты
@@ -19,9 +22,27 @@ var CandidatesStat = function() {
 		
 		// запускаем сортировку
 		_root.sortedByUserID = sortByUserID();
+	})();
+	
+	
+	/**
+	 * 
+	 */
+	this.getFilteredStat = function( user_id, presentedVehicles, battles_type ) {
+		if (undefined === battles_type) {
+			battles_type = "all";
+		}
 		
-		return _root;
-	};
+		var ret = new Object();
+		
+		for (p in presentedVehicles) {
+			var tank_id = presentedVehicles[ p ];
+			
+			ret[ tank_id ] = _root['sortedByUserID'][ user_id ]['all'][ tank_id ];
+		}
+		
+		return ret;
+	}
 	
 	
 	/**
