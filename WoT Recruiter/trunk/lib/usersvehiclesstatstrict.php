@@ -210,7 +210,11 @@ class UsersVehiclesStatStrict extends UsersVehiclesStat {
 		$where_users = '';
 		
 		if ( is_array( $users )) {
-			// @todo: sql инъекция ?
+			if (! isset($users[0])) {
+				// если пользователей нет, то и статистики нет
+				return array();
+			}
+			// @warning!: sql инъекция ?
 			$where_users = "`account_id` IN (". implode(", ", $users) .") ";
 		} else {
 			$where_users ="`account_id` = ". (0+ $users) ." ";

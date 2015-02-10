@@ -74,27 +74,6 @@ VehiclesInterview = function() {
 	 * 
 	 */
 	function DrawSelectedVehicles() {
-		/*
-		var html_selectedVehicles = '';
-		var sorted = new Object();
-		// Создадим сортированный список техники, чтобы не было радуги в выводе.
-		for (tank_id in SelectedVehicles) {
-			if ("undefined" === typeof sorted[ tankopedia['vehicles'][ tank_id ]['type'] ]) {
-				sorted[ tankopedia['vehicles'][ tank_id ]['type'] ] = '';
-			}
-			// Воспользуемся тем, что ширина поля вывода ограничена, и с помощью стилей
-			// организуем вывод в определенные позиции, чтобы было похоже на колонки.
-			sorted[ tankopedia['vehicles'][ tank_id ]['type'] ] +=
-					"<span class='vehicle-preset " + tankopedia['vehicles'][ tank_id ]['type'] + "'>" +
-							tankopedia['vehicles'][ tank_id ]['short_name_i18n'] +
-					"</span>";
-		}
-		for (type in sorted) {
-			html_selectedVehicles += "<div>" + sorted[ type ] + "</div>";
-		}
-		
-		$('#selectedVehicles').html( html_selectedVehicles );
-		*/
 		$('#selectedVehicles').Container( SelectedVehicles );
 		$('#selectedVehicles').children('.vehicle-preset').click( onVehicleClick );
 	}

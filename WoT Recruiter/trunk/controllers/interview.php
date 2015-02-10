@@ -130,7 +130,7 @@ class ControllerInterview extends Controller {
 		$engine = Engine::getInstance();
 		
 		if ($engine->user->getStatus() !== UserAuth::AUTH_SUCCESS) {
-			$this->view->display(View::CONT_AUTH_NEEDED);
+			Route::Relocate( Route::AUTH );
 			return;
 		}
 		
@@ -156,12 +156,20 @@ class ControllerInterview extends Controller {
 	 */
 	public function show() {
 		$model = new ModelInterview( 0+ $this->get('itrv_id') );
-		$model->getUsersStat();
-		
-		$this->view->display(
-				"interview.html",
-				$model
-		);
+		if ( $model->isVisible( $_GET['secure'] ) ) {
+			$model->getUsersStat();
+			
+			$this->view->display(
+					"interview.html",
+					$model
+			);
+		}
+		else {
+			$this->view->display(
+					"error.html",
+					array('code' => 403, 'msg' => "access denied")
+			);
+		}
 	}
 	
 	
@@ -169,7 +177,7 @@ class ControllerInterview extends Controller {
 		$engine = Engine::getInstance();
 		
 		if ($engine->user->getStatus() !== UserAuth::AUTH_SUCCESS) {
-			$this->view->display(View::CONT_AUTH_NEEDED);
+			Route::Relocate( Route::AUTH );
 			return;
 		}
 		

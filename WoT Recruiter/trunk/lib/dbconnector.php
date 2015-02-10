@@ -2,12 +2,10 @@
 
 class DBConnector extends PDO {
 	
+	protected $lastQuery;
+	
 	public function query( $statement ) {
-		file_put_contents(
-			BASE_DIR . "queryhist.sql",
-			$statement ."\n=============================================\n",
-			FILE_APPEND
-		);
+		$this->lastQuery = $statement;
 		
 		return parent::query( $statement );
 	}
@@ -15,5 +13,10 @@ class DBConnector extends PDO {
 	
 	public function tables($table) {
 		return TABLE_PREFIX . $table;
+	}
+	
+	
+	public function getLastQuery() {
+		return $this->lastQuery;
 	}
 }

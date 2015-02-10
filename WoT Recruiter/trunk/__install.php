@@ -20,7 +20,8 @@ try {
 			`lastUpdated` TEXT,
 			`lastForceUpdated` TEXT,
 			`access_token` VARCHAR(42),
-			`expires` INTEGER(10)
+			`expires` INTEGER(10),
+			`clan_id` INTEGER(10) NOT NULL DEFAULT 0
 		);";
 	$sql .= "CREATE UNIQUE INDEX `id` ON `". $db->tables("users") ."` (`id`);";
 	if (false === $db->query( $sql )) {
@@ -34,6 +35,7 @@ try {
 			`a_vehicles` text NOT NULL,
 			`active` BOOLEAN NOT NULL DEFAULT TRUE,
 			`visability` VARCHAR(7) NOT NULL DEFAULT 'all',
+			`secure` VARCHAR(32),
 			`plan` VARCHAR (8),
 			`itrv_comment` text,
 			`owner` INTEGER (10) NOT NULL

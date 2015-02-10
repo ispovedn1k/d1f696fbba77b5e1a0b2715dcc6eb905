@@ -10,7 +10,15 @@ foreach( $data->_candidates as $candidate) {
 		</div>
 	<?php
 	$squads[ $candidate->status ] .= ob_get_clean();
-}?>
+}
+/**
+ * Сделать сортировку вывода калькулятора техники в отряде.
+ * 
+ * Сделать сортировку вывода статистики игрока.
+ * Добавить цветовую градацию
+ */
+
+?>
 
 <table>
 	<tr>
@@ -34,9 +42,9 @@ foreach( $data->_candidates as $candidate) {
 			</thead>
 			<tbody>
 				<tr>
-					<td><span class="{{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.short_name_i18n}}</span></td>
-					<td>{{~item~}}</td>
-					<td>{{squads.vehicles.~key~.num_required}}</td>
+					<td><span class="{{~item~.tvi.type}}">{{~item~.tvi.short_name_i18n}}</span></td>
+					<td>{{~item~.data.insquad}}</td>
+					<td>{{~item~.data.required}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -70,13 +78,13 @@ foreach( $data->_candidates as $candidate) {
 			</thead>
 			<tbody>
 				<tr>
-					<td><span class="{{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.short_name_i18n}}</span></td>
-					<td>{{~item~.battles}}</td>
-					<td>{{~item~.winrate}}</td>
-					<td>{{~item~.avg_damage}}</td>
-					<td>{{~item~.hits_percents}}</td>
-					<td>{{~item~.avg_spotted}}</td>
-					<td>{{~item~.avg_surv}}</td>
+					<td><span class="{{~item~.tvi.type}}">{{~item~.tvi.short_name_i18n}}</span></td>
+					<td>{{~item~.data.battles}}</td>
+					<td>{{~item~.data.winrate}}</td>
+					<td>{{~item~.data.avg_damage}}</td>
+					<td>{{~item~.data.hits_percents}}</td>
+					<td>{{~item~.data.avg_spotted}}</td>
+					<td>{{~item~.data.avg_surv}}</td>
 				</tr>
 			</tbody>
 		</table>

@@ -26,7 +26,7 @@ var CandidatesStat = function( _data ) {
 	
 	
 	/**
-	 * 
+	 * @descr: Выдает данные для #candidateInfoStat таблицы
 	 */
 	this.getFilteredStat = function( user_id, presentedVehicles, battles_type ) {
 		if (undefined === battles_type) {
@@ -41,12 +41,12 @@ var CandidatesStat = function( _data ) {
 			ret[ tank_id ] = _root['sortedByUserID'][ user_id ]['all'][ tank_id ];
 		}
 		
-		return ret;
+		return sortVehiclesData2LTN( ret );
 	}
 	
 	
 	/**
-	 * @desc: Превращает данные в отсортированные по пользовательским ID
+	 * @descr: Превращает данные в отсортированные по пользовательским ID
 	 */
 	function sortByUserID ( ) {
 		var ret = new Object();

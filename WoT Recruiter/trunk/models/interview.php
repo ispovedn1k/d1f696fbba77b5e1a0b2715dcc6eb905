@@ -13,7 +13,8 @@ class ModelInterview extends UniqDBObjectModel {
 			$squads_num,
 			$itrv_comment,
 			$plan,
-			$visability;
+			$visability,
+			$secure;
 	
 	public $a_vehicles;
 	
@@ -73,6 +74,13 @@ class ModelInterview extends UniqDBObjectModel {
 		$this->itrv_comment = $data['itrv_comment'];
 		$this->plan = $data['plan'];
 		$this->visability = $data['visability'];
+		if ( 'clan' === $this->visability ) {
+			$this->secure = Engine::getInstance()->user->clan_id;
+		}
+		elseif ( 'invite' === $this->visability ) {
+			$this->secure = md5( Secrets::SOLT . time() . $this->itrv_name );
+			
+		}
 		
 		if ( false !== $this->insertObjectToDB(array("itrv_id")) ){
 			return Engine::getInstance()->db->lastInsertId();
@@ -281,5 +289,26 @@ class ModelInterview extends UniqDBObjectModel {
 		
 		// бьем по площадям
 		$this->_statData = UsersVehiclesStatStrict::loadVehiclesStatInfo( $candidates, $vehicles, "all" );
+	}
+	
+	
+	/**
+	 * @param string $secure
+	 * @return boolean
+	 */
+	public function isVisible( $secure ) {
+		if ("all" === $this->visability ) {
+			return true;
+		}
+		
+		if (("clan" === $this->visability) && ($this->secure === Engine::getInstance()->user->clan_id)) {
+			return true;
+		}
+		
+		if (("invite" === $this->visability) && ($this->secure === $secure) || Engine::getInstance()->user->isBlessed()) {
+			return true;
+		}
+		
+		return false;
 	}
 } 

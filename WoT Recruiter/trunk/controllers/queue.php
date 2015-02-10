@@ -113,7 +113,6 @@ class ControllerQueue extends Controller {
 	 * @see Controller::defaultAction()
 	 */
 	public function defaultAction() {
-		@file_put_contents("queue_log.txt", date("H:i:s "). $_SERVER['REMOTE_ADDR'] ."\r\n");
 		// сбрасываем все неразрешенные подключения
 		if ( QUEUE_ALLOWED_IP !== $_SERVER['REMOTE_ADDR'] ) {
 			return;

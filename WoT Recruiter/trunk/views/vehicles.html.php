@@ -20,7 +20,7 @@
 		<tr data-tank_id="{{~key~}}">
 			<td>
 				<?php if (! $data->isMember() ) : ?>
-				<input type="checkbox" name="vehicles[]" value="{{~key~}}"/>
+				<input type="checkbox" name="vehicles[]" value="{{~key~}}" />		
 				<?php endif;?>
 			</td>
 			<td><span class="vehicle {{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.name_i18n}}</span></td>

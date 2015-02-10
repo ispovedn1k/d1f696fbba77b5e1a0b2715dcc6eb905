@@ -14,6 +14,6 @@ class Route {
 	
 	
 	public static function RemoteUrl( $url ) {
-		return $url;
+		return ROOT_URI . $url;
 	}
 }

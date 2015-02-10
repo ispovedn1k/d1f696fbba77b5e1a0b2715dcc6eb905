@@ -13,7 +13,14 @@
 			<select><option>цель создания</option></select>
 			<div class="radiogroup"><label>Видимость команды:</label><br />
 				<label><input type="radio" name="visability" value="all" checked="checked"/>видна всем</label><br />
-				<label><input type="radio" name="visability" value="clan" />только бойцам клана</label><br />
+				<label>
+					<input type="radio" name="visability" value="clan"
+					<?php echo (0 != Engine::getInstance()->user->clan_id ? 
+							'' :
+							'disabled="disabled"');?>
+					/>
+					только бойцам клана
+				</label><br />
 				<label><input type="radio" name="visability" value="invite" />только приглашенным</label><br />
 			</div>
 		</td>

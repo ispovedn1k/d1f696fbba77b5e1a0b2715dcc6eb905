@@ -1,13 +1,16 @@
 <h3><?php echo $data->itrv_name;?></h3>
+<input type="text" readonly="readonly" value="<?php echo Route::RemoteUrl("?cont=interview&action=show&itrv_id=". $data->itrv_id .
+		("invite" === $data->visability ? "&secure=". $data->secure : ''));?>" 
+		class="interview-url" />
 <div class="descr"><?php echo $data->itrv_comment;?></div>
 
 <script type="text/javascript">
 var moves = new Object();
-var candidatesStat = new CandidatesStat(<?php echo json_encode($data->_statData);?>);
 
 var squads = new Squads(
 	<?php echo json_encode( $data->_candidates );?>,
-	<?php echo json_encode( $data->a_vehicles );?>
+	<?php echo json_encode( $data->a_vehicles );?>,
+	<?php echo json_encode($data->_statData);?>
 );
 
 $(function() {
@@ -30,7 +33,7 @@ $(function() {
 	
 	$('.candidate').click(function(){
 		var user_id = $(this).data('userid');
-		$('#candidateInfoStat tbody').Container( candidatesStat.getFilteredStat( user_id, squads.Candidates[user_id].a_vehicles ) );
+		$('#candidateInfoStat tbody').Container( squads.candidatesStat.getFilteredStat( user_id, squads.Candidates[user_id].a_vehicles ) );
 	});
 	$('#candidateInfoStat tbody').Container( {} );
 	
@@ -58,7 +61,7 @@ $(function() {
 });
 </script>
 <?php
-if (! $data->isMember() ) {
+if ((! $data->isMember()) && (UserAuth::AUTH_SUCCESS == Engine::getInstance()->user->getStatus()) ) {
 	include "vehicles.html.php";
 }
 /**

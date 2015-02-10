@@ -22,6 +22,8 @@ class UserAuth {
 	
 	public $expires;
 	
+	public $clan_id; // будет обновляться вместе со статистикой по технике
+	
 	protected $_authStatus;
 	
 	
@@ -99,6 +101,7 @@ class UserAuth {
 		$this->lastForceUpdated = $row['lastForceUpdated'];
 		$this->access_token = $row['access_token'];
 		$this->expires = $row['expires'];
+		$this->clan_id = $row['clan_id'];
 		$this->_authStatus = self::AUTH_SUCCESS;
 		
 		if (! $this->isStatUp2Date() ) {
@@ -202,10 +205,17 @@ class UserAuth {
 	 */
 	public function updatePlayerStat( $force = false ) {
 		$time = time();
+		$clan_update = '';
+		
 		// если добавлялся в очередь менее чем сутки назад
 		if (( $time - $this->lastForceUpdated ) < ( 60 * 60 * 24 ) ) {
 			// не будем ничего делать
 			return false;
+		}
+		
+		$clan_id = self::getUserClan_id( $this->user_id );
+		if ( false !== $clan_id ) {
+			$clan_update = "`clan_id` = {$clan_id}, ";
 		}
 		
 		$res = ModelQueue::addTask(
@@ -226,39 +236,11 @@ class UserAuth {
 		
 		$this->lastForceUpdated = $time;
 		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
+				{$clan_update}				
 				`lastForceUpdated` = ". $this->lastForceUpdated . "
 				WHERE `id` = ". $this->id . ";";
 			
 		return $db->query( $sqlUpdate );
-		
-		/*	
-		$enforce = '';
-		$time = time();
-		
-		// запрещаем обновление чаще чем раз в сутки
-		if (( $time - $this->lastForceUpdated )< ( 60 * 60 * 24 ) ) {
-			return false;
-		}
-		
-		$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $this->id, $this->access_token );
-		UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
-		$this->lastUpdated = $time;
-		
-		if ( $force ) {
-			$this->lastForceUpdated = $time;
-			$enforce = " `lastForceUpdated` = ". $this->lastForceUpdated . " ,";
-		}
-		
-		$db = Engine::getInstance()->db;
-		
-		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
-			{$enforce}
-			`lastUpdated` = ". $this->lastUpdated . "
-			
-			WHERE `id` = ". $this->id . ";";
-	
-		return $db->query( $sqlUpdate );
-		*/
 	}
 	
 	
@@ -289,7 +271,7 @@ class UserAuth {
 		
 		$stat = UsersVehiclesStatStrict::RequestVehiclesStatInfo( $user_id,	$access_token );
 		UsersVehiclesStatStrict::SaveVehiclesStatInfo( $stat );
-		
+				
 		$db = Engine::getInstance()->db;
 			
 		$sqlUpdate = "UPDATE `". $db->tables("users") ."` SET
@@ -298,6 +280,36 @@ class UserAuth {
 				WHERE `id` = {$user_id};";
 		
 		return $db->query( $sqlUpdate );
+	}
+	
+	
+	/**
+	 * @param integer $user_id
+	 * @return false|integer
+	 */
+	private static function getUserClan_id( $user_id ) {
+		$context = stream_context_create(
+				array('http' =>
+						array(
+								'method'  => 'POST',
+								'header'  => 'Content-type: application/x-www-form-urlencoded',
+								'content' => http_build_query(
+										array(
+												'fields' => "clan_id",
+												'account_id' => $user_id,
+												'application_id' => Secrets::WG_ID
+										)
+								)
+						)
+				)
+		);
+		$data = json_decode(@file_get_contents('https://api.worldoftanks.ru/wot/account/info/', false, $context),true);
+		if ( "ok" === $data['status'] ) {
+			return $data['data'][ $user_id ]['clan_id'];
+		}
+		else {
+			return false;
+		}
 	}
 	
 	
