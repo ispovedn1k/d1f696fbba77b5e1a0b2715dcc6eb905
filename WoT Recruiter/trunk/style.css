@@ -210,3 +210,30 @@ div.copyright {
 .interview-url {
 	width: 100%;
 }
+
+
+/*********************************************************/
+/*** rating colors ***/
+.vrating-0 {
+	color: #FE0E00;
+}
+
+.vrating-1 {
+	color: #FE7903;
+}
+
+.vrating-2 {
+	color: #D5D201;
+}
+
+.vrating-3 {
+	color: #489928;
+}
+
+.vrating-4 {
+	color: #02C9B3;
+}
+
+.vrating-5 {
+	color: #D042F3;
+}

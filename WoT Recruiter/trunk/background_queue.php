@@ -11,6 +11,11 @@ $max_execution_time = ini_get("max_execution_time");
 
 ignore_user_abort(1);
 
+/**
+ * Для nginx потребовалось включение опции fastcgi_ignore_client_abort on;
+ */
+
+
 
 try {
 	$engine = Engine::getInstance();

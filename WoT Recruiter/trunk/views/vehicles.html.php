@@ -17,25 +17,20 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr data-tank_id="{{~key~}}">
+		<tr data-tank_id="{{~item~.tank_id}}">
 			<td>
 				<?php if (! $data->isMember() ) : ?>
-				<input type="checkbox" name="vehicles[]" value="{{~key~}}" />		
+				<input type="checkbox" name="vehicles[]" value="{{~item~.tank_id}}" />		
 				<?php endif;?>
 			</td>
-			<td><span class="vehicle {{tankopedia.vehicles.~key~.type}}">{{tankopedia.vehicles.~key~.name_i18n}}</span></td>
-			<?php /* @warning:
-				Мне не нравится, что JS-переменная candidatesStat определена в другом файле.
-				*/
-				$user_id = Engine::getInstance()->user->id;
-			?>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.in_garage}}  / {{~item~.num_required}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.battles}} / {{~item~.battles}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.winrate}} / {{~item~.winrate}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_damage}} / {{~item~.avg_damage}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.hits_percents}} / {{~item~.avg_hits}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_spotted}} / {{~item~.avg_spotted}}</td>
-			<td>{{candidatesStat.sortedByUserID.<?php echo $user_id;?>.all.~key~.avg_surv}} / {{~item~.avg_surv}}</td>
+			<td><span class="vehicle {{~item~.tvi.type}}">{{~item~.tvi.name_i18n}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.in_garage}}">{{~item~.data.userStat.in_garage}} / {{~item~.data.required.num_required}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.battles}}">{{~item~.data.userStat.battles}} / {{~item~.data.required.battles}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.winrate}}">{{~item~.data.userStat.winrate}} / {{~item~.data.required.winrate}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.avg_damage}}">{{~item~.data.userStat.avg_damage}} / {{~item~.data.required.avg_damage}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.hits_percents}}">{{~item~.data.userStat.hits_percents}} / {{~item~.data.required.hits_percents}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.avg_spotted}}">{{~item~.data.userStat.avg_spotted}} / {{~item~.data.required.avg_spotted}}</span></td>
+			<td><span class="vrating-{{~item~.data.ratingColorID.avg_surv}}">{{~item~.data.userStat.avg_surv}} / {{~item~.data.required.avg_surv}}</span></td>
 		</tr>
 	</tbody>
 </table>

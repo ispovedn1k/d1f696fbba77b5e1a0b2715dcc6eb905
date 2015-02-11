@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/plain');
 require_once 'config.php';
 require_once 'lib/functions.php';
 
@@ -8,7 +9,7 @@ echo "==============================================". PHP_EOL . PHP_EOL;
 
 try {
 	$db = Engine::getInstance()->db;
-	
+
 	echo "DONE! Completed successfully!". PHP_EOL;
 }
 catch (Exception $e) {

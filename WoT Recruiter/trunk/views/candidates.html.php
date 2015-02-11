@@ -79,12 +79,12 @@ foreach( $data->_candidates as $candidate) {
 			<tbody>
 				<tr>
 					<td><span class="{{~item~.tvi.type}}">{{~item~.tvi.short_name_i18n}}</span></td>
-					<td>{{~item~.data.battles}}</td>
-					<td>{{~item~.data.winrate}}</td>
-					<td>{{~item~.data.avg_damage}}</td>
-					<td>{{~item~.data.hits_percents}}</td>
-					<td>{{~item~.data.avg_spotted}}</td>
-					<td>{{~item~.data.avg_surv}}</td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.battles}}" title="{{~item~.data.required.battles}}">{{~item~.data.userStat.battles}}</span></td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.winrate}}" title="{{~item~.data.required.winrate}}">{{~item~.data.userStat.winrate}}</span></td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.avg_damage}}" title="{{~item~.data.required.avg_damage}}">{{~item~.data.userStat.avg_damage}}</span></td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.hits_percents}}" title="{{~item~.data.required.hits_percents}}">{{~item~.data.userStat.hits_percents}}</span></td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.avg_spotted}}" title="{{~item~.data.required.avg_spotted}}">{{~item~.data.userStat.avg_spotted}}</span></td>
+					<td><span class="vrating-{{~item~.data.ratingColorID.avg_surv}}" title="{{~item~.data.required.avg_surv}}">{{~item~.data.userStat.avg_surv}}</span></td>
 				</tr>
 			</tbody>
 		</table>

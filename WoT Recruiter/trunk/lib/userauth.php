@@ -212,8 +212,8 @@ class UserAuth {
 			// не будем ничего делать
 			return false;
 		}
-		
-		$clan_id = self::getUserClan_id( $this->user_id );
+
+		$clan_id = self::getUserClan_id( $this->id );
 		if ( false !== $clan_id ) {
 			$clan_update = "`clan_id` = {$clan_id}, ";
 		}

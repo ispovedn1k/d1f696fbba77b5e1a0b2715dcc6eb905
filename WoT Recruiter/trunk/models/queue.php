@@ -60,11 +60,7 @@ class ModelQueue extends Model {
 	/**
 	 * Помещает на позицию 0 в очереди задачу об остановке. Т. о. остановка производится немедленно.
 	 */
-	public static function Terminate() {
-		if (! self::hasAccess() ) {
-			return false;
-		}
-		
+	public static function Terminate() {		
 		$db = Engine::getInstance()->db;
 		$mctime = microtime(true);
 		// записываем метку для остановки и подготавливаем точку для старта

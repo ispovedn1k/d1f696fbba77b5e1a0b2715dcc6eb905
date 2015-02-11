@@ -115,7 +115,7 @@
 				</label>
 				<br />
 				<label>% попаданий:
-					<input type="text" id="avg_hits" name="avg_hits"/>
+					<input type="text" id="hits_percents" name="hits_percents"/>
 				</label>
 				<br />
 				<label>средний урон:

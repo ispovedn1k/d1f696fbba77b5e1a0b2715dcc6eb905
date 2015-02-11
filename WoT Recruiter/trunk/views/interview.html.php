@@ -30,10 +30,10 @@ $(function() {
 	});
 	$('.squad-box').disableSelection();
 	<? endif; ?>
-	
+
 	$('.candidate').click(function(){
 		var user_id = $(this).data('userid');
-		$('#candidateInfoStat tbody').Container( squads.candidatesStat.getFilteredStat( user_id, squads.Candidates[user_id].a_vehicles ) );
+		$('#candidateInfoStat tbody').Container( squads.getRequredVehiclesInfo( user_id, true) );
 	});
 	$('#candidateInfoStat tbody').Container( {} );
 	
@@ -56,7 +56,7 @@ $(function() {
 		);
 	});
 
-	$('#requiredVehicles tbody').Container( squads.vehicles );
+	$('#requiredVehicles tbody').Container( squads.getRequredVehiclesInfo(<?php echo Engine::getInstance()->user->id;?>) );
 	$('#squad_calc tbody').Container( squads.calcVehiclesInSquad( 1 ) );
 });
 </script>

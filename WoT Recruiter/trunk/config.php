@@ -6,7 +6,7 @@ define('DOMAIN_NAME', "vl.ispovedn1k.com");
 define('ROOT_URI', "http://vl.ispovedn1k.com/");
 // лучше использовать случайный хэш, и переименовать backgroun_queue.php, чтобы не знали, как достучаться
 define('QUEUE_SCRIPT_URI', "http://vl.ispovedn1k.com/background_queue.php?cont=queue");
-define('QUEUE_ALLOWED_IP', "192.168.1.1");
+define('QUEUE_ALLOWED_IP', "127.0.0.1");
 
 if (! defined('__DIR__')) {
 	define('__DIR__', dirname(__FILE__));
