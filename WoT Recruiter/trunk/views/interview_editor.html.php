@@ -34,7 +34,7 @@
 		<td>
 			<div class="helper">Добавьте описание</div>
 			<textarea id="itrv_comment" name="itrv_comment" class="commentbox"></textarea>
-			<input type="button" value="create" id="submit"/>
+			<input type="button" value="Создать" id="submit"/>
 		</td>
 	</tr>
 	<tr>
@@ -104,39 +104,41 @@
 					<td class="vtype"></td>
 				</tr>
 				<tr><td class="vname"></td></tr>
+				<tr><td colspan="2">
+					<div class="helper">При желании можете указать дополнительную информацию тут.</div>
+				</td></tr>
+				<tr>
+					<th>Кол-во боев:</th>
+					<td><input type="text" id="battles" name="battles" /></td>
+				</tr>
+				<tr>
+					<th>% побед:</th>
+					<td><input type="text" id="winrate" name="winrate" /></td>
+				</tr>
+				<tr>
+					<th>% попаданий:</th>
+					<td><input type="text" id="hits_percents" name="hits_percents"/></td>
+				</tr>
+				<tr>
+					<th>средний урон:</th>
+					<td><input type="text" id="avg_damage" name="avg_damage" /></td>
+				</tr>
+				<tr>
+					<th>обнаружено в среднем:</th>
+					<td><input type="text" id="avg_spotted" name="avg_spotted" /></td>
+				</tr>
+				<tr>
+					<th>выживаемость:</th>
+					<td><input type="text" id="avg_surv" name="avg_surv" /></td>
+				</tr>
+				<tr>
+					<th>Требуется единиц:</th>
+					<td><input type="text" id="num_required" name="num_required" /></td>
+				</tr>
 				</table>
-				<div class="helper">При желании можете указать дополнительную информацию тут.</div>
-				<label>Кол-во боев:
-					<input type="text" id="battles" name="battles" />
-				</label>
-				<br />
-				<label>% побед:
-					<input type="text" id="winrate" name="winrate" />
-				</label>
-				<br />
-				<label>% попаданий:
-					<input type="text" id="hits_percents" name="hits_percents"/>
-				</label>
-				<br />
-				<label>средний урон:
-					<input type="text" id="avg_damage" name="avg_damage" />
-				</label>
-				<br />
-				<label>обнаружено в среднем:
-					<input type="text" id="avg_spotted" name="avg_spotted" />
-				</label>
-				<br />
-				<label>выживаемость:
-					<input type="text" id="avg_surv" name="avg_surv" />
-				</label>
-				<br />
-				<label>Требуется единиц:
-					<input type="text" id="num_required" name="num_required" />
-				</label>
-				<br />
 				<label>
-					<input type="button" value="request" id="addvehilcebutton" />
-					<input type="button" value="decline" id="removevehiclebutton" />
+					<input type="button" value="Запросить" id="addvehilcebutton" />
+					<input type="button" value="Отозвать" id="removevehiclebutton" />
 				</label>
 			</div>
 		</td>

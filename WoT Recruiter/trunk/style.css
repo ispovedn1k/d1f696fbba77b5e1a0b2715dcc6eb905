@@ -1,9 +1,26 @@
 @CHARSET "UTF-8";
 
+body {
+	background-color: #000;
+	color: #DDD;
+}
+
+div.banner {
+	background-image: url("images/wot_512x212.jpg");
+	background-position: center top;
+	background-repeat: no-repeat;
+	height: 170px;
+}
+
+a:visited {
+	color: #ff8040;
+}
+
 pre {
-	background-color: #efefef;
+	background-color: #080808;
 	border: 1px solid #dfdfdf;
 	padding: 10px;
+	opacity: 0.7;
 }
 
 table {
@@ -20,19 +37,19 @@ td {
 }
 
 .mediumTank {
-	color: #c49209;
+	color: #f8ca52;
 }
 
 .heavyTank {
-	color: #3333333;
+	color: #888888;
 }
 
 .AT-SPG {
-	color: #000088;
+	color: #0080ff;
 }
 
 .SPG {
-	color: #6c400d;
+	color: #6f2c0b;
 }
 
 .vehicle-preset {
@@ -106,12 +123,13 @@ textarea.commentbox {
 
 .candidate {
 	border: 1px solid #dddddd;
-	background-color: #efefef;
+	background-color: #8F8F8F;
 	width: 468px;
 	height: 24px;
 	padding-left: 10px;
 	z-index: 1;
 	cursor: move;
+	color: #444;
 }
 
 .candidate:active {
@@ -140,8 +158,8 @@ textarea.commentbox {
 	text-align: center;
 	padding: 0px;
 	margin: 0px;
-	color: #0000bb;
-	border: 1px solid #dddddd;
+	color: #ff8040;
+	border: 1px solid #804000;
 	box-sizing: content-box;
 }
 
@@ -149,6 +167,30 @@ textarea.commentbox {
 	float: right;
 }
 
+.main-menu a.up2date {
+	border: 1px solid #1baf3d;
+	box-shadow: 0px 0px 50px #1baf3d, inset 0px 0px 30px #1baf3d;
+}
+
+.main-menu a.obsolete {
+	border: 1px solid #f9211c;
+	box-shadow: 0px 0px 50px #f9211c, inset 0px 0px 30px #f9211c;
+}
+
+.main-menu a.authblock .popupHelp {
+	display: none;
+}
+
+.main-menu a.authblock:hover .popupHelp{
+	display: block;
+	position: absolute;
+	z-index: 2;
+	width: 220px;
+	height: 70px;
+	color: #DDD;
+	margin-top: 10px;
+	border: 1px solid #222;
+}
 
 /******************************************************/
 div.main-container{
@@ -172,7 +214,7 @@ div.copyright {
 }
 .interview_new td {
 	vertical-align: top;
-	border: 1px solid #dddddd;
+	/*border: 1px solid #dddddd; */
 }
 
 
@@ -181,11 +223,14 @@ div.copyright {
 	width: 200px;
 	height: 210px;
 	position: absolute;
-	background-color: #F8F8F8;
-	border: 1px solid #888888;
+	background-color: #0F0F0F;
+	border: 1px solid #ff8040;
+	border-radius: 5px;
 	z-index: 2;
 	right: 10px;
 	padding: 10px;
+	color: #444;
+	box-shadow: 0px 0px 50px rgba(215,70,0,0.5);
 }
 
 .queue-interface-box .queue-st-running {
@@ -205,7 +250,11 @@ div.copyright {
 }
 
 
-
+.helper {
+	font-size: 14px;
+	color: #455;
+	padding: 10px;
+}
 
 .interview-url {
 	width: 100%;
