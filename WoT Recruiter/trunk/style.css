@@ -1,4 +1,7 @@
 @CHARSET "UTF-8";
+@import url("styles/colors.css");
+@import url("styles/menus.css");
+@import url("styles/interview.css");
 
 body {
 	background-color: #000;
@@ -12,10 +15,6 @@ div.banner {
 	height: 170px;
 }
 
-a:visited {
-	color: #ff8040;
-}
-
 pre {
 	background-color: #080808;
 	border: 1px solid #dfdfdf;
@@ -25,38 +24,17 @@ pre {
 
 table {
 	width: 100%;
+	border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid #000;
+	padding-left: 5px;
 }
 
 td {
 	vertical-align: top;
 	text-align: left;
-}
-
-.lightTank {
-	color: #008800;
-}
-
-.mediumTank {
-	color: #f8ca52;
-}
-
-.heavyTank {
-	color: #888888;
-}
-
-.AT-SPG {
-	color: #0080ff;
-}
-
-.SPG {
-	color: #6f2c0b;
-}
-
-.vehicle-preset {
-	display: inline-block;
-	width: 95px;
-	margin: 0px;
-	padding-left: 4px;
 }
 
 textarea.commentbox {
@@ -65,31 +43,20 @@ textarea.commentbox {
 	resize: none;
 }
 
-.vehicle:hover {
-	background-color: #FAFAFA;
-	border: 1px solid #EFEFEF;
-	cursor: pointer;
+/******************************************************/
+div.main-container{
+	margin: 170px auto 0px auto;
+	border: 1px solid rgba(255,255,255,0.1);
+	background-image: url("styles/images/content_bg.png");
+	width: 1000px;
+	min-height: 90%;
+	z-index: 0;
+	box-sizing: border-box;
 }
 
-.vehicle .contourbox {
-	width: 95px;
-	padding: 0px;
-	margin: 0px;
-	border: none;
-	background-color: transparent;
-	display: inline-block;
+.main-container .content-wrapper {
+	margin: 25px;
 }
-
-.pointed-vehicle {
-	background-color: #F5F5F5;
-	border: 1px solid #E4E4E4;
-}
-
-.selected-vehicle {
-	background-color: #E0E0E0;
-}
-
-
 /******************************************************/
 .spoiler .spoiler-head {
 	cursor: pointer;
@@ -104,119 +71,11 @@ textarea.commentbox {
 	border: 1px solid #444444;
 }
 
-/******************************************************/
-#requiredVehicles {
-	width: 100%;
-}
 
-#squad_calc {
-	width: 470px;
-}
-
-.squad-box {
-	border: 1px solid #888888;
-	width: 480px;
-	height: 320px;
-	position: relative;
-	z-index: 0;
-}
-
-.candidate {
-	border: 1px solid #dddddd;
-	background-color: #8F8F8F;
-	width: 468px;
-	height: 24px;
-	padding-left: 10px;
-	z-index: 1;
-	cursor: move;
-	color: #444;
-}
-
-.candidate:active {
-	border: 1px dashed #ff0000;
-}
-
-.candidate:hover {
-	background-color: #e8e8e8;
-}
-
-#candidateInfoStat {
-	width: 100%;
-}
-
-/******************************************************/
-.main-menu {
-	margin: 0px;
-	padding: 0px;
-}
-
-.main-menu a{
-	display: inline-block;
-	width: 110px;
-	height: 24px;
-	text-decoration: none;
-	text-align: center;
-	padding: 0px;
-	margin: 0px;
-	color: #ff8040;
-	border: 1px solid #804000;
-	box-sizing: content-box;
-}
-
-.main-menu a.authblock {
-	float: right;
-}
-
-.main-menu a.up2date {
-	border: 1px solid #1baf3d;
-	box-shadow: 0px 0px 50px #1baf3d, inset 0px 0px 30px #1baf3d;
-}
-
-.main-menu a.obsolete {
-	border: 1px solid #f9211c;
-	box-shadow: 0px 0px 50px #f9211c, inset 0px 0px 30px #f9211c;
-}
-
-.main-menu a.authblock .popupHelp {
-	display: none;
-}
-
-.main-menu a.authblock:hover .popupHelp{
-	display: block;
-	position: absolute;
-	z-index: 2;
-	width: 220px;
-	height: 70px;
-	color: #DDD;
-	margin-top: 10px;
-	border: 1px solid #222;
-}
-
-/******************************************************/
-div.main-container{
-	margin: 0 auto;
-	border: 1px solid #888;
-	width: 1000px;
-	min-height: 90%;
-	z-index: 0;
-	box-sizing: border-box;
-}
 
 div.copyright {
 	text-align: center;
 }
-
-
-
-/******************************************************/
-.interview_new {
-	width: 100%;
-}
-.interview_new td {
-	vertical-align: top;
-	/*border: 1px solid #dddddd; */
-}
-
 
 /*****************************************************/
 .queue-interface-box {
@@ -256,33 +115,5 @@ div.copyright {
 	padding: 10px;
 }
 
-.interview-url {
-	width: 100%;
-}
-
 
 /*********************************************************/
-/*** rating colors ***/
-.vrating-0 {
-	color: #FE0E00;
-}
-
-.vrating-1 {
-	color: #FE7903;
-}
-
-.vrating-2 {
-	color: #D5D201;
-}
-
-.vrating-3 {
-	color: #489928;
-}
-
-.vrating-4 {
-	color: #02C9B3;
-}
-
-.vrating-5 {
-	color: #D042F3;
-}

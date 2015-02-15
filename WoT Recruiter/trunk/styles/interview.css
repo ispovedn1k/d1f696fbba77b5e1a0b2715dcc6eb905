@@ -1,0 +1,85 @@
+@CHARSET "UTF-8";
+
+/******************************************************/
+.interview_new {
+	width: 100%;
+}
+.interview_new td {
+	vertical-align: top;
+	/*border: 1px solid #dddddd; */
+}
+
+.interview-url {
+	width: 100%;
+}
+
+.vehicle:hover {
+	background-color: #444;
+	cursor: pointer;
+}
+
+.vehicle .contourbox {
+	width: 95px;
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	background-color: transparent;
+	display: inline-block;
+}
+
+.pointed-vehicle {
+	background-color: #000;
+}
+
+.selected-vehicle {
+	background-color: #666;
+}
+
+
+.vehicle-preset {
+	display: inline-block;
+	width: 95px;
+	margin: 0px;
+	padding-left: 4px;
+}
+
+
+/******************************************************/
+#requiredVehicles {
+	width: 100%;
+}
+
+#squad_calc {
+	width: 470px;
+}
+
+.squad-box {
+	border: 1px solid #888888;
+	width: 480px;
+	height: 320px;
+	position: relative;
+	z-index: 0;
+}
+
+.candidate {
+	border: 1px solid #dddddd;
+	background-color: #8F8F8F;
+	width: 468px;
+	height: 24px;
+	padding-left: 10px;
+	z-index: 1;
+	cursor: move;
+	color: #444;
+}
+
+.candidate:active {
+	border: 1px dashed #ff0000;
+}
+
+.candidate:hover {
+	background-color: #e8e8e8;
+}
+
+#candidateInfoStat {
+	width: 100%;
+}
