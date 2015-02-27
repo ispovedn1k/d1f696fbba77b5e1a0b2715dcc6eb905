@@ -1,4 +1,4 @@
-<div class="menu main-menu">
+<div class="menu top-menu">
 <?php if ( UserAuth::AUTH_SUCCESS === Engine::getInstance()->user->getStatus() ) : ?>
 	<a href="?cont=auth&action=logout" class="authblock">Logout</a>
 	<a href="#" class="authblock <?php echo (Engine::getInstance()->user->isStatUp2Date() ? "up2date" : "obsolete");?>">

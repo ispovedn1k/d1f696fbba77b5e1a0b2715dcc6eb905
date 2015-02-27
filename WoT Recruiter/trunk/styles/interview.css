@@ -14,7 +14,7 @@
 }
 
 .vehicle:hover {
-	background-color: #444;
+	background-color: #333;
 	cursor: pointer;
 }
 
@@ -28,11 +28,11 @@
 }
 
 .pointed-vehicle {
-	background-color: #000;
+	background-color: #2F2F22;
 }
 
 .selected-vehicle {
-	background-color: #666;
+	background-color: #222;
 }
 
 
@@ -47,6 +47,12 @@
 /******************************************************/
 #requiredVehicles {
 	width: 100%;
+}
+
+.calc_container {
+	height: 363px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #squad_calc {

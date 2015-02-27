@@ -31,23 +31,25 @@ foreach( $data->_candidates as $candidate) {
 		<?php endfor;?>
 		</td>
 		<td>
-		<table id="squad_calc">
-			<caption>В отряде техники:</caption>
-			<thead>
-				<tr>
-					<th>Единица</th>
-					<th>шт.</th>
-					<th>треб.</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><span class="{{~item~.tvi.type}}">{{~item~.tvi.short_name_i18n}}</span></td>
-					<td>{{~item~.data.insquad}}</td>
-					<td>{{~item~.data.required}}</td>
-				</tr>
-			</tbody>
-		</table>
+			<div class="calc_container">
+				<table id="squad_calc">
+					<caption>В отряде техники:</caption>
+					<thead>
+						<tr>
+							<th>Единица</th>
+							<th>шт.</th>
+							<th>треб.</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><span class="{{~item~.tvi.type}}">{{~item~.tvi.short_name_i18n}}</span></td>
+							<td>{{~item~.data.insquad}}</td>
+							<td>{{~item~.data.required}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</td>
 	</tr>
 </table>
@@ -68,10 +70,10 @@ foreach( $data->_candidates as $candidate) {
 			<thead>
 				<tr>
 					<th>техника</th>
-					<th>боев</th>
-					<th>побед</th>
+					<th title="боев"><div class="icon50 icon50-battles"></div></th>
+					<th title="побед"><div class="icon50 icon50-wins"></th>
 					<th>урон</th>
-					<th>попаданий</th>
+					<th title="попаданий"><div class="icon50 icon50-hits"></div></th>
 					<th>обнаружено</th>
 					<th>выживаемость</th>
 				</tr>

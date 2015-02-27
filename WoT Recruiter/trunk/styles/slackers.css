@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+
+#slackers th {
+	cursor: pointer;
+}
+
+#slackers td {
+	width: 33%;
+	color: #DDDDDD;
+}
+
+#slackers tr:hover td {
+	color: #ff0000;
+}

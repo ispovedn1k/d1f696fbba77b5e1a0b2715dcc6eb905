@@ -80,4 +80,10 @@ class Controller {
 	public function defaultAction() {
 		$this->view->display();
 	}
+	
+	
+	public function about() {
+		$this->view->menu_pointer = "about";
+		$this->view->display('about.html');
+	}
 }

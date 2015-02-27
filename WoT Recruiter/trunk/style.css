@@ -2,6 +2,8 @@
 @import url("styles/colors.css");
 @import url("styles/menus.css");
 @import url("styles/interview.css");
+@import url("styles/slackers.css");
+@import url("styles/news.css");
 
 body {
 	background-color: #000;
@@ -43,6 +45,13 @@ textarea.commentbox {
 	resize: none;
 }
 
+textarea, input, select {
+	background-color: #3D3D3D;
+	color: #aaa;
+	border: 1px solid #333;
+	margin: 3px 0px;
+}
+
 /******************************************************/
 div.main-container{
 	margin: 170px auto 0px auto;
@@ -60,8 +69,14 @@ div.main-container{
 /******************************************************/
 .spoiler .spoiler-head {
 	cursor: pointer;
-	background-color: #aaaadd;
+	background-color: #447;
+	padding: 5px 15px;
 }
+
+.spoiler .spoiler-head h4 {
+	margin: 0px;
+}
+
 .spoiler .spoiler-head:hover {
 	background-color: #88aadd;
 }
@@ -117,3 +132,38 @@ div.copyright {
 
 
 /*********************************************************/
+
+
+.icon50 {
+	display: block;
+	width: 50px;
+	height: 50px;
+	background-color: transparent;
+	background-image: url("styles/images/speedometr-param.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+.icon50-battles {
+	background-position: -50px;
+}
+
+.icon50-wins {
+	background-position: -200px;
+}
+
+.icon50-exp {
+	background-position: -350px;
+}
+
+.icon50-hits {
+	background-position: -500px;
+}
+
+.icon50-direction {
+	background-position: -650px;
+}
+
+.icon50-citadel {
+	background-position: -800px;
+}

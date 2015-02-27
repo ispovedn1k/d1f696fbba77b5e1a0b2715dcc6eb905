@@ -6,6 +6,7 @@ class ControllerSearch extends Controller {
 	public function find() {
 		$model = new ModelSearch();
 		
+		$this->view->menu_pointer = "search";
 		$this->view->display(
 				"search_result.html",
 				$model->getAll()
@@ -23,6 +24,7 @@ class ControllerSearch extends Controller {
 		
 		$model = new ModelSearch();
 		
+		$this->view->menu_pointer = "mysquads";
 		$this->view->display(
 				"search_result.html",
 				$model->getMine()

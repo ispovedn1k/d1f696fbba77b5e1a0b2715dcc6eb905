@@ -22,7 +22,8 @@ class ControllerInterview extends Controller {
 		
 		// проверяем, есть ли право на редактирование этой команды
 		// разрешено редактировать владельцу, мне и создавать новые
-		if ( $engine->user->id === $model->owner || $engine->user->id === "3916664" || $model->owner === 0) {	
+		if ( $engine->user->id === $model->owner || $engine->user->id === "3916664" || $model->owner === 0) {
+			$this->view->menu_pointer = "create";
 			$this->view->display(
 					"interview_editor.html",
 					$model
