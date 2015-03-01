@@ -28,9 +28,9 @@ class ModelQueue extends Model {
 		if ( $res->rowCount() == 0 ) {
 			// Записей об остановке не было, вставим запись старта
 			$sql = "INSERT INTO `". $db->tables("queue") ."`
-					(`id`, `callName`, `params`, `execmicrotime`, `done`)
+					(`callName`, `params`, `execmicrotime`, `done`)
 					VALUES
-					(1, 'start', 'running', {$mctime}, 1);";
+					('start', 'running', {$mctime}, 1);";
 			return $db->query( $sql );
 		}
 		
@@ -63,8 +63,23 @@ class ModelQueue extends Model {
 	public static function Terminate() {		
 		$db = Engine::getInstance()->db;
 		$mctime = microtime(true);
+		// проверяем, не запущен ли терминатор
+		$sql = "SELECT `done` FROM `". $db->tables("queue") ."` WHERE `id` = 0;";
+		
+		$res = $db->query( $sql );
+		
+		if (! $res ) {
+			Log::put( print_r( $db->errorInfo(), true ) );
+			throw new Exception("sql error");
+		}
+		
+		$row = $res->fetch(PDO::FETCH_ASSOC);
+		if ( $row['done'] === 0 ) {
+			// терминатор активен
+			return;
+		}
 		// записываем метку для остановки и подготавливаем точку для старта
-		$sql = "INSERT INTO `". $db->tables("queue") ."` (`id`, `callName`, `execmicrotime`, `done`) VALUES (0, 'stop', '{$mctime}', 0);";
+		$sql = "UPDATE `". $db->tables("queue") ."` SET `execmicrotime` = '{$mctime}', `done` = 0, `params` = 'terminator active' WHERE `id` = 0;";
 		$db->query( $sql );
 		$sql = "INSERT INTO `". $db->tables("queue") ."` (`callName`, `execmicrotime`, `done`) VALUES ('prestart', 0, 0);";
 		
@@ -284,14 +299,12 @@ class ModelQueue extends Model {
 	 * @return PDOStatement
 	 */
 	protected function shutDown() {
-		// если это терминатор, убираем его
+		// если это терминатор, убиваем его
 		if ( $this->id == 0 ) {
-			$this->deleteTask();
+			$this->params = "terminator dead";
 		}
-		else {
-			$this->done = 1;
-			$this->updateTask();
-		}
+		$this->done = 1;
+		$this->updateTask();
 		
 		$db = Engine::getInstance()->db;
 		

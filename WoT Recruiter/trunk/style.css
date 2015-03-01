@@ -67,6 +67,10 @@ div.main-container{
 	margin: 25px;
 }
 /******************************************************/
+.spoiler {
+	margin: 5px 0px;
+}
+
 .spoiler .spoiler-head {
 	cursor: pointer;
 	background-color: #447;

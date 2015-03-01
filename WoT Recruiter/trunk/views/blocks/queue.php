@@ -75,7 +75,7 @@
 						alert("success started");
 					}
 					else {
-						alert("stat failed!\n". response.msg);
+						alert("stat failed!\n" + response.msg);
 					}
 
 					updateQueueStat();
@@ -97,7 +97,7 @@
 						alert("stop mark added");
 					}
 					else {
-						alert("stop failed!\n". response.msg);
+						alert("stop failed!\n" + response.msg);
 					}
 				},
 				"json"
@@ -117,7 +117,7 @@
 						alert("terminate mark added");
 					}
 					else {
-						alert("terminate failed!\n". response.msg);
+						alert("terminate failed!\n" + response.msg);
 					}
 
 					updateQueueStat();

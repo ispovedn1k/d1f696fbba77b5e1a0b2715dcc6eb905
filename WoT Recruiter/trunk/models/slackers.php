@@ -41,7 +41,7 @@ class ModelSlackers extends Model {
 			return;
 		}
 		
-		$sql = "INSERT INTO `". $db->tables("slackers") ."`
+		$sql = "INSERT IGNORE INTO `". $db->tables("slackers") ."`
 					(`clanID`, `clanTag`, `year`, `month`, `day`, `ipSender`, `playerID`, `playerName`, `resources`)
 				VALUES (".
 					$data['clanID'] .", '".
@@ -86,7 +86,7 @@ class ModelSlackers extends Model {
 		$pastData = $this->getDataAtDate( $clanID, $monthAgo );
 		
 		// проверяем получение данных.
-		if(isset($todayData[0]) && isset($pastData[0])) {
+		if(isset($todayData) && isset($pastData)) {
 			// все хорошо, данные получены
 			return array(
 					'strict' => true,
@@ -106,14 +106,14 @@ class ModelSlackers extends Model {
 		
 		$calendar = $res->fetchAll(PDO::FETCH_ASSOC);
 		
-		if (! isset($todayData[0]) ) {
+		if (! isset($todayData) ) {
 			// если не получены данные на сегодня. Ищем ближайшую дату в прошлом
 			$today = $this->_getNearestDate($calendar, $today, $monthAgo, "-");
 			if ($today ) {
 				$todayData = $this->getDataAtDate($clanID, $today);				
 			}
 		}
-		if (! isset($todayData[0]) ) {
+		if (! isset($pastData) ) {
 			// если не получены данные на дату в прошлом. Ищем ближайшую дату после нее
 			$monthAgo = $this->_getNearestDate($calendar, $monthAgo, $today, "+");
 			if ($monthAgo ) {
@@ -134,7 +134,7 @@ class ModelSlackers extends Model {
 	 * @param integer $clanID
 	 * @param DateTime $date
 	 * @throws Exception
-	 * @return multitype:string
+	 * @return multitype:string | null
 	 */
 	public function getDataAtDate( $clanID, $date ) {
 		$db = Engine::getInstance()->db;
@@ -150,6 +150,9 @@ class ModelSlackers extends Model {
 		}
 		
 		$rows = $res->fetchAll(PDO::FETCH_ASSOC);
+		if (! isset($rows[0]) ) {
+			return null;
+		}
 		$ret = array();
 		foreach ($rows as $row) {
 			$ret[ $row['playerID'] ] = $row;
