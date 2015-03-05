@@ -70,12 +70,12 @@ foreach( $data->_candidates as $candidate) {
 			<thead>
 				<tr>
 					<th>техника</th>
-					<th title="боев"><div class="icon50 icon50-battles"></div></th>
-					<th title="побед"><div class="icon50 icon50-wins"></th>
-					<th>урон</th>
-					<th title="попаданий"><div class="icon50 icon50-hits"></div></th>
-					<th>обнаружено</th>
-					<th>выживаемость</th>
+					<th title="боев"><div class="icon34 icon34-avg-battles"></div></th>
+					<th title="побед"><div class="icon34 icon34-wins"></div></th>
+					<th title="средний урон"><div class="icon34 icon34-avg-dmg"></div></th>
+					<th title="попаданий"><div class="icon34 icon34-prec"></div></th>
+					<th title="обнаружено в среднем"><div class="icon34 icon34-avg-spotted"></div></th>
+					<th title="выживаемость"><div class="icon34 icon34-survived"></div></th>
 				</tr>
 			</thead>
 			<tbody>

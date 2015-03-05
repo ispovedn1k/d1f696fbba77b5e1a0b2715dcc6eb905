@@ -39,12 +39,12 @@
 			<td>{{~collection~.data.endpoint_id}}</td>
 		</tr>
 	</tbody>
+	</table>
 	<div class="buttonsbox">
 		<input type="button" id="queueStart" value="start" />
 		<input type="button" id="queueStop" value="stop" />
 		<input type="button" id="queueTerminate" value="terminate" />
 	</div>
-	</table>
 </div>
 <script type="text/javascript">
 

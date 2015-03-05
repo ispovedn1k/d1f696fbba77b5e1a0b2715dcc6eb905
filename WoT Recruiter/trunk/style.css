@@ -4,6 +4,7 @@
 @import url("styles/interview.css");
 @import url("styles/slackers.css");
 @import url("styles/news.css");
+@import url("styles/icons.css");
 
 body {
 	background-color: #000;
@@ -37,6 +38,10 @@ table, th, td {
 td {
 	vertical-align: top;
 	text-align: left;
+}
+
+th {
+	padding: 5px;
 }
 
 textarea.commentbox {
@@ -110,6 +115,9 @@ div.copyright {
 	color: #444;
 	box-shadow: 0px 0px 50px rgba(215,70,0,0.5);
 }
+.queue-interface-box th {
+	padding: 0px;
+}
 
 .queue-interface-box .queue-st-running {
 	color: green;
@@ -136,38 +144,15 @@ div.copyright {
 
 
 /*********************************************************/
-
-
-.icon50 {
-	display: block;
-	width: 50px;
-	height: 50px;
-	background-color: transparent;
-	background-image: url("styles/images/speedometr-param.png");
-	background-position: 0px 0px;
-	background-repeat: no-repeat;
+.sortable {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
-.icon50-battles {
-	background-position: -50px;
+.sorted-asc {
+	cursor: n-resize;
 }
 
-.icon50-wins {
-	background-position: -200px;
-}
-
-.icon50-exp {
-	background-position: -350px;
-}
-
-.icon50-hits {
-	background-position: -500px;
-}
-
-.icon50-direction {
-	background-position: -650px;
-}
-
-.icon50-citadel {
-	background-position: -800px;
+.sorted-desc {
+	cursor: s-resize;
 }
