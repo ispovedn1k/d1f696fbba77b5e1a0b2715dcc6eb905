@@ -1,0 +1,120 @@
+@CHARSET "UTF-8";
+
+/*********************************************************/
+.icon50 {
+	display: block;
+	width: 50px;
+	height: 50px;
+	background-color: transparent;
+	background-image: url("images/speedometr-param.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+.icon50-battles {
+	background-position: -50px;
+}
+
+.icon50-wins {
+	background-position: -200px;
+}
+
+.icon50-exp {
+	background-position: -350px;
+}
+
+.icon50-hits {
+	background-position: -500px;
+}
+
+.icon50-direction {
+	background-position: -650px;
+}
+
+.icon50-citadel {
+	background-position: -800px;
+}
+
+
+/*********************************************************/
+.icon34 {
+	display: block;
+	width: 46px;
+	height: 34px;
+	background-color: transparent;
+	background-image: url("images/leadership-ico.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+.icon34-avg-destroyed {
+	background-position-y: 0px;
+}
+
+.icon34-survived {
+	background-position-y: -34px;
+}
+
+.icon34-wins {
+	background-position-y: -68px;
+}
+
+.icon34-destroyed {
+	background-position-y: -102px;
+}
+.icon34-avg-dmg {
+	background-position-y: -136px;
+}
+
+.icon34-avg-exp {
+	background-position-y: -170px;
+}
+
+.icon34-prec {
+	background-position-y: -204px;
+}
+
+.icon34-spotted {
+	background-position-y: -238px;
+}
+
+.icon34-max-exp {
+	background-position-y: -272px;
+}
+
+.icon34-dmg {
+	background-position-y: -306px;
+}
+
+.icon34-avg-spotted {
+	background-position-y: -340px;
+}
+
+.icon34-exp {
+	background-position-y: -374px;
+}
+
+.icon34-avg-battles {
+	background-position-y: -408px;
+}
+
+.icon34-deaths {
+	background-position-y: -442px;
+}
+
+.icon34-medals {
+	background-position-y: -476px;
+}
+
+.icon34-mastery {
+	background-position-y: -510px;
+}
+
+.icon34-forts {
+	background-position-y: -544px;
+}
+
+.icon34-gm {
+	background-position-y: -578px;
+}
+

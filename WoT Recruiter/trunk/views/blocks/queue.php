@@ -56,7 +56,7 @@
 					if ("object" !== typeof response) {
 						return;
 					}
-					$('.queue-interface-box table').Tankany( response );
+					$('.queue-interface-box table').Container( response, true );
 				},
 				"json"
 		);

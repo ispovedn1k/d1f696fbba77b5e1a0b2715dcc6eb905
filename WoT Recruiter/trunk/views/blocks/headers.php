@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>WoT Team Creator</title>
@@ -15,6 +16,7 @@
 	<script type="text/javascript" src="js/vehiclestemplate.js"></script>
 	<script type="text/javascript" src="js/candidatesstat.js"></script>
 	<script type="text/javascript" src="js/squads.js"></script>
+	<script type="text/javascript" src="js/sortabletable.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$('.spoiler').click(function(){
