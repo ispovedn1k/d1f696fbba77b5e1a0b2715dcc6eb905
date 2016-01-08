@@ -123,7 +123,7 @@ class UsersVehiclesStatStrict extends UsersVehiclesStat {
 		// подготавливаем запросы
 		$vars = get_class_vars( get_class() );
 		$update_query = "UPDATE `". $db->tables("users_vehicles") ."` SET ";
-		$insert_query = "INSERT INTO `". $db->tables("users_vehicles") ."` (";
+		$insert_query = "INSERT IGNORE INTO `". $db->tables("users_vehicles") ."` (";
 		$values = '';
 		
 		foreach ( $vars as $k=>$v) {
@@ -176,18 +176,10 @@ class UsersVehiclesStatStrict extends UsersVehiclesStat {
 			throw new ErrorException("failquery ". $insert_query. "<pre>". print_r($db->errorInfo(), true)."</pre>");
 		}
 		foreach ( $unsaved as $tank_id ) {
-			if (! $insert->execute( $vehicles_list[ $tank_id ]['all']->toPDOArray() ) ) {
-				throw new ErrorException("failinsert <pre>". print_r($db->errorInfo(), true)."</pre>");
-			}
-			if (! $insert->execute( $vehicles_list[ $tank_id ]['team']->toPDOArray() ) ) {
-				throw new ErrorException("failinsert <pre>". print_r($db->errorInfo(), true)."</pre>");
-			}
-			if (! $insert->execute( $vehicles_list[ $tank_id ]['clan']->toPDOArray() ) ) {
-				throw new ErrorException("failinsert <pre>". print_r($db->errorInfo(), true)."</pre>");
-			}
-			if (! $insert->execute( $vehicles_list[ $tank_id ]['company']->toPDOArray() ) ) {
-				throw new ErrorException("failinsert <pre>". print_r($db->errorInfo(), true)."</pre>");
-			}
+			$insert->execute( $vehicles_list[ $tank_id ]['all']->toPDOArray() );
+			$insert->execute( $vehicles_list[ $tank_id ]['team']->toPDOArray() );
+			$insert->execute( $vehicles_list[ $tank_id ]['clan']->toPDOArray() );
+			$insert->execute( $vehicles_list[ $tank_id ]['company']->toPDOArray() );
 			$counter++;
 		}
 		

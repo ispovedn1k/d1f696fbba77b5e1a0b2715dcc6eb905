@@ -32,7 +32,7 @@ catch (Exception $e) {
 	$file_content .= '$_SERVER'. PHP_EOL. print_r( $_SERVER, true ) . PHP_EOL;
 	$file_content .= '$_COOKIES'. PHP_EOL. print_r( $_COOKIE, true ) . PHP_EOL;
 	$file_content .= '$engine'. PHP_EOL. print_r( $engine, true ) . PHP_EOL;
-	$file_content .= 'lastQury: '. $engine->db->getLastQuery() . PHP_EOL;
+	$file_content .= 'lastQuery: '. $engine->db->getLastQuery() . PHP_EOL;
 	$file_content .= 'logDump:'. PHP_EOL . print_r (LOG::getAll(), true) . PHP_EOL;
 	
 	@file_put_contents( LOG_DIR . @date("Y-m-d_H-i-s") .".log", $file_content);

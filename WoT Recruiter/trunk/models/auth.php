@@ -77,6 +77,7 @@ class ModelAuth extends Model {
 
 			$user->id = $data['data']['account_id'];;
 			$user->personName = $_GET['nickname'];
+			$user->clan_id = UserAuth::getUserClan_id( $user->id );
 			// @todo: надо ли тут сохранять так жестко? Или можно придумать что-то лучше?
 			$this->saveAuth();
 			$user->access_token = $data['data']['access_token'];

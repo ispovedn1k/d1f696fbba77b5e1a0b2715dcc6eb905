@@ -124,6 +124,7 @@ class UserAuth {
 			`loginHash` = '" . $this->loginHash . "',
 			`lastLogin` = ". $this->lastLogin . ",
 			`access_token` = '". addslashes( $this->access_token ) ."',
+			`clan_id` = ". (0 + $this->clan_id) .",
 			`expires` = ". (0 + $this->expires) .
 			" WHERE `id` = ". $this->id . ";";
 		
@@ -146,7 +147,8 @@ class UserAuth {
 					`loginHash`,
 					`lastIp`,
 					`access_token`,
-					`expires` )
+					`expires`,
+					`clan_id` )
 				VALUES (
 					".( 0+ $this->id ). ", 
 					'". addslashes( $this->personName ). "',
@@ -155,7 +157,8 @@ class UserAuth {
 					'". addslashes( $this->loginHash ). "',
 					'". addslashes( $this->lastIp ). "',
 					'". addslashes( $this->access_token ) ."',
-					". (0 + $this->expires) ."		
+					". (0 + $this->expires) .",
+					". (0 + $this->clan_id) ."
 				);";
 		
 		return $db->query( $sqlInsert );
@@ -287,7 +290,7 @@ class UserAuth {
 	 * @param integer $user_id
 	 * @return false|integer
 	 */
-	private static function getUserClan_id( $user_id ) {
+	public static function getUserClan_id( $user_id ) {
 		$context = stream_context_create(
 				array('http' =>
 						array(
